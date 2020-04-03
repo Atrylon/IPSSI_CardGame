@@ -1,1 +1,1 @@
-"# IPSSI_CardGame" 
+# IPSSI_CardGame
