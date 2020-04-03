@@ -10,8 +10,8 @@ class Card:
         self.gold_stock = 0
         self.mana_generation = 1
         self.mana_stock = 0
-        self.power_generation = 1
-        self.power_stock = 0
+        self.action_generation = 1
+        self.action_stock = 0
 
     def changeHP(self, hp_change):
         self.hp = self.hp - hp_change
