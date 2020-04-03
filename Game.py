@@ -34,11 +34,13 @@ def blit_text(surface, text, pos, font, color=pygame.Color('black')):
         x = pos[0]  # Reset the x.
         y += word_height  # Start on new row.
 
+
 def draw_text(text, font, color, surface, x, y):
     textobj = font.render(text, 1, color)
     textrect = textobj.get_rect()
     textrect.topleft = (x, y)
     surface.blit(textobj, textrect)
+
 
 def main_menu():
 
@@ -74,6 +76,8 @@ def main_menu():
         screen.blit(font_title.render('Règles', True, (0, 0, 0)), (88, 375))
         screen.blit(font_title.render('Options', True, (0, 0, 0)), (88, 525))
         screen.blit(font_title.render('Quitter', True, (0, 0, 0)), (88, 675))
+
+        blit_text(screen, 'Cliquer sur le menu pour y accèder ou appuyer sur \'Echap\' pour revenir au menu précédent', (950, 455), font_text)
         pygame.display.update()
 
         click = False
@@ -107,6 +111,7 @@ def game():
                     running = False
 
         pygame.display.update()
+
 
 def rules():
     running = True
@@ -158,6 +163,22 @@ def options():
         screen.fill((192, 192, 192))
 
         draw_text('Options', font_title, (0, 0, 0), screen, 20, 20)
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == KEYDOWN:
+                if event.key == K_ESCAPE:
+                    running = False
+
+        pygame.display.update()
+
+
+def end_game():
+    running = True
+    while running:
+        screen.fill((192, 192, 192))
+
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()

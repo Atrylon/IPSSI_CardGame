@@ -16,14 +16,15 @@ def init_db():
         # Creer table Card
         sqlquery = """
         CREATE TABLE IF NOT EXISTS card (
-        Id INT PRIMARY KEY NOT NULL,
+        Id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
         Name CHAR(100) NOT NULL,
-        Ressource_type CHAR(100) NOT NULL,
+        Ressource_type CHAR(10) NOT NULL,
         Cost INT NOT NULL,
-        Effect CHAR(255) NOT NULL,
+        Effect CHAR(100) NOT NULL,
         Value INT NOT NULL,
         Target CHAR(100) NOT NULL,
-        Rarity CHAR(100) NOT NULL
+        Rarity CHAR(100) NOT NULL,
+        Description CHAR(255) NOT NULL
         )
         """
         cur.execute(sqlquery)
@@ -32,7 +33,7 @@ def init_db():
         # Creer table Deck
         sqlquery2 = """
         CREATE TABLE IF NOT EXISTS Deck (
-        Id INT PRIMARY KEY NOT NULL
+        Id INT AUTO_INCREMENT PRIMARY KEY NOT NULL
         )
         """
         cur.execute(sqlquery2)
@@ -41,7 +42,7 @@ def init_db():
         # Creer table Deck_Cards
         sqlquery3 = """
         CREATE TABLE IF NOT EXISTS Deck_cards (
-        Id INT PRIMARY KEY NOT NULL,
+        Id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
         Id_Deck INT  NOT NULL,
         Id_card INT  NOT NULL
         )

@@ -1,5 +1,5 @@
 class Card:
-    def __init__(self, name, ressource_type, cost, effect, value, target, rarity):
+    def __init__(self, name, ressource_type, cost, effect, value, target, rarity, description):
         self.name = name
         self.ressource_type = ressource_type
         self.cost = cost
@@ -7,6 +7,7 @@ class Card:
         self.value = value
         self.target = target
         self.rarity = rarity
+        self.description = description
 
     def _get_name(self):
         return self.name
@@ -49,3 +50,9 @@ class Card:
 
     def _set_rarity(self, new_rarity):
         self.rarity = new_rarity
+
+    def _get_description(self):
+        return self.description
+
+    def _set_description(self, new_description):
+        self.description = new_description
