@@ -1,4 +1,4 @@
-class Card:
+class Player:
     def __init__(self, index):
         # Joueur 1 ou Joueur 2
         self.index = index

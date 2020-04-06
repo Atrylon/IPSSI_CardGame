@@ -15,6 +15,7 @@ def cards_list():
     font_title = pygame.font.SysFont('Helvetic', 75)
 
     continuer = True
+    card_set = {}
 
     # begin of the loop
     n = 0
@@ -35,6 +36,7 @@ def cards_list():
         fond_carte_po = pygame.image.load("ressources/fonds de cartes/fond_carte_13.png").convert_alpha()
         fond_carte_pm = pygame.image.load("ressources/fonds de cartes/fond_carte_11.png").convert_alpha()
         fond_carte_pa = pygame.image.load("ressources/fonds de cartes/fond_carte_09.png").convert_alpha()
+
         left_arrow = pygame.image.load("ressources/images/left arrow.png").convert_alpha()
         left_arrow_small = pygame.transform.scale(left_arrow, (50, 50))
         button_left_arrow = pygame.Rect(5, 430, 50, 50)
@@ -50,6 +52,10 @@ def cards_list():
 
         # On veut afficher juste 3 cartes à la fois
         for card in cards[n:m]:
+
+            # card_set[card[0]] = pygame.Rect(x, y, 340, 474)
+            # pygame.draw.rect(screen, (192, 192, 192), card_set[card[0]])
+
             if card[2] == "PO":
                 screen.blit(fond_carte_po, (x, y))
             elif card[2] == "PM":
@@ -59,7 +65,7 @@ def cards_list():
 
             if n > 0:
                 screen.blit(left_arrow_small, (5, 430))
-            if nb_cards > n+3 :
+            if nb_cards > n+3:
                 screen.blit(right_arrow_small, (1225, 430))
 
             text_tools.draw_text(card[1], font_text, (0, 0, 0), screen, x+50, y+20)
@@ -81,6 +87,10 @@ def cards_list():
             if event.type == MOUSEBUTTONDOWN:
                 if button_option_1.collidepoint(mx, my) and event.button == 1:
                     continuer = False
+
+                # for i in range(n, m):
+                #     if card_set[i+1].collidepoint(mx, my) and event.button == 1:
+                #         print(card_set[i+1])
 
                 if button_left_arrow.collidepoint(mx, my) and event.button == 1 and n > 0:
                     n = n - 3
