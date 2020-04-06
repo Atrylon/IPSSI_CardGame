@@ -1,11 +1,11 @@
 import MySQLdb as mdb
 
+DBNAME = "ipssi_card_game"
+DBHOST = "localhost"
+DBPASS = ""
+DBUSER = "root"
 
 def init_db():
-    DBNAME = "ipssi_card_game"
-    DBHOST = "localhost"
-    DBPASS = ""
-    DBUSER = "root"
 
     try:
         db = mdb.connect(DBHOST, DBUSER, DBPASS, DBNAME)
@@ -54,3 +54,26 @@ def init_db():
 
     except mdb.Error as e:
         print("Connexion error")
+
+
+def readCards():
+
+    final_result = []
+
+    try:
+        connection = mdb.connect(DBHOST, DBUSER, DBPASS, DBNAME)
+
+        query = "SELECT * FROM card"
+
+        cursor = connection.cursor()
+        cursor.execute(query)
+
+        result = cursor.fetchall()
+
+        final_result = [list(i) for i in result]
+        # print(final_result)
+
+    except mdb.Error as e:
+        print("Connexion error")
+
+    return final_result
