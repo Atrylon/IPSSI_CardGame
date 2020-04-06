@@ -15,47 +15,52 @@ def cards_list():
     font_title = pygame.font.SysFont('Helvetic', 75)
 
     continuer = True
-    click = False
-    cards_set = 0
-    cards_in_set = 0
+
+    # begin of the loop
+    n = 0
+    # end of the loop
+    m = 3
 
     while continuer:
         mx, my = pygame.mouse.get_pos()
         screen.fill((192, 192, 192))
 
         button_option_1 = pygame.Rect(20, 20, 100, 40)
-
         pygame.draw.rect(screen, (255, 0, 0), button_option_1)
-
         text_tools.draw_text('Retour', font_text, (0, 0, 0), screen, 35, 25)
 
         cards = mysql_connexion.readCards()
+        nb_cards = len(cards)
 
         fond_carte_po = pygame.image.load("ressources/fonds de cartes/fond_carte_13.png").convert_alpha()
         fond_carte_pm = pygame.image.load("ressources/fonds de cartes/fond_carte_11.png").convert_alpha()
         fond_carte_pa = pygame.image.load("ressources/fonds de cartes/fond_carte_09.png").convert_alpha()
         left_arrow = pygame.image.load("ressources/images/left arrow.png").convert_alpha()
         left_arrow_small = pygame.transform.scale(left_arrow, (50, 50))
+        button_left_arrow = pygame.Rect(5, 430, 50, 50)
+        pygame.draw.rect(screen, (192, 192, 192), button_left_arrow)
+
         right_arrow = pygame.image.load("ressources/images/right arrow.png").convert_alpha()
         right_arrow_small = pygame.transform.scale(right_arrow, (50, 50))
+        button_right_arrow = pygame.Rect(1225, 430, 50, 50)
+        pygame.draw.rect(screen, (192, 192, 192), button_right_arrow)
+
         x = 110
         y = 200
 
-        for card in cards:
-            # if cards_in_set == 3:
-            #     break
-
+        # On veut afficher juste 3 cartes à la fois
+        for card in cards[n:m]:
             if card[2] == "PO":
                 screen.blit(fond_carte_po, (x, y))
             elif card[2] == "PM":
                 screen.blit(fond_carte_pm, (x, y))
             elif card[2] == "PA":
                 screen.blit(fond_carte_pa, (x, y))
-            cards_in_set += 1
 
-            if cards_set != 0:
+            if n > 0:
                 screen.blit(left_arrow_small, (5, 430))
-            screen.blit(right_arrow_small, (1225, 430))
+            if nb_cards > n+3 :
+                screen.blit(right_arrow_small, (1225, 430))
 
             text_tools.draw_text(card[1], font_text, (0, 0, 0), screen, x+50, y+20)
             text_tools.draw_text('Cost : ' + str(card[3]) + ' ' + card[2], font_text, (0, 0, 0), screen, x+50, y+100)
@@ -75,15 +80,13 @@ def cards_list():
                     continuer = False
             if event.type == MOUSEBUTTONDOWN:
                 if button_option_1.collidepoint(mx, my) and event.button == 1:
-                   continuer = False
+                    continuer = False
 
-                if left_arrow_small.get_rect().collidepoint(mx, my):
-                   print("clic")
-                if left_arrow_small.get_rect().collidepoint(mx, my):
-                    cards_set -= 1
-                    print(cards_set)
-                elif right_arrow_small.get_rect().collidepoint(mx, my):
-                    cards_set += 1
-                    print(cards_set)
+                if button_left_arrow.collidepoint(mx, my) and event.button == 1 and n > 0:
+                    n = n - 3
+                    m = m - 3
+                elif button_right_arrow.collidepoint(mx, my) and event.button == 1 and nb_cards > n+3:
+                    n = n + 3
+                    m = m + 3
 
         pygame.display.update()
