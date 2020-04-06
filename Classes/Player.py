@@ -1,7 +1,8 @@
 class Player:
-    def __init__(self, index):
+    def __init__(self, index, name):
         # Joueur 1 ou Joueur 2
         self.index = index
+        self.name = name
         self.hp = 100
         self.shield = 30
         # Tableau qui contient la main du joueur - 7 cartes max

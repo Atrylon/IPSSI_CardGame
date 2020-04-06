@@ -5,6 +5,7 @@ DBHOST = "localhost"
 DBPASS = ""
 DBUSER = "root"
 
+
 def init_db():
 
     try:
@@ -33,7 +34,8 @@ def init_db():
         # Creer table Deck
         sqlquery2 = """
         CREATE TABLE IF NOT EXISTS Deck (
-        Id INT AUTO_INCREMENT PRIMARY KEY NOT NULL
+        Id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+        Name CHAR(100) NOT NULL
         )
         """
         cur.execute(sqlquery2)
@@ -49,6 +51,36 @@ def init_db():
         """
         cur.execute(sqlquery3)
         print("Table deck_card Created Successfully")
+
+        # Creer table Player
+        sqlquery4 = """
+        CREATE TABLE IF NOT EXISTS Player (
+        Id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+        Player_index INT NOT NULL,
+        Name CHAR(100) NOT NULL,
+        HP INT NOT NULL,
+        Shield INT NOT NULL,
+        Gold_generation INT NOT NULL,
+        Gold_stock INT NOT NULL,
+        Mana_generation INT NOT NULL,
+        Mana_stock INT NOT NULL,
+        Action_generation INT NOT NULL,
+        Action_stock INT NOT NULL
+        )
+        """
+        cur.execute(sqlquery4)
+        print("Table Player Created Successfully")
+
+        # Creer table Player_Hand
+        sqlquery5 = """
+        CREATE TABLE IF NOT EXISTS Player_hand (
+        Id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+        Id_Player INT  NOT NULL,
+        Id_card INT  NOT NULL
+        )
+        """
+        cur.execute(sqlquery5)
+        print("Table Player_hand Created Successfully")
 
         db.close()
 

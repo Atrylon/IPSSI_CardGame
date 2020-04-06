@@ -6,6 +6,7 @@ import mysql_connexion
 import Cards_CRUD
 import Stats
 import text_tools
+import play
 
 mysql_connexion.init_db()
 
@@ -18,10 +19,11 @@ center_x, center_y = 640, 455
 GREEN = (40, 230, 120)
 font_title = pygame.font.SysFont('Helvetic', 75)
 font_text = pygame.font.SysFont('Comic Sans MS,Arial', 20)
+son = pygame.mixer.Sound("ressources/sound/The Witcher 3 - Wild Hunt OST - Cloak and Dagger.wav")
 
 
 def main_menu():
-
+    son.play(loops=0, maxtime=0, fade_ms=0)
     click = False
 
     while True:
@@ -35,7 +37,7 @@ def main_menu():
 
         if button_1.collidepoint(mx, my):
             if click:
-                game()
+                play.game()
         if button_2.collidepoint(mx, my):
             if click:
                 rules()
@@ -70,23 +72,6 @@ def main_menu():
             if event.type == MOUSEBUTTONDOWN:
                 if event.button == 1:
                     click = True
-
-        pygame.display.update()
-
-
-def game():
-    continuer = True
-    while continuer:
-        fond = pygame.image.load("ressources/images/background_gwent.jpg").convert()
-        screen.blit(fond, (0, 0))
-
-        for event in pygame.event.get():
-            if event.type == QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == KEYDOWN:
-                if event.key == K_ESCAPE:
-                    continuer = False
 
         pygame.display.update()
 
