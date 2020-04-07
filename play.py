@@ -75,7 +75,7 @@ def game():
                            card_from_hand_to_deck[7],
                            card_from_hand_to_deck[8])
         joueur1.hand.append(card_to_add)
-        deck_joueur1.del_card_from_deck(card_from_hand_to_deck)
+        # deck_joueur1.del_card_from_deck(card_from_hand_to_deck)
 
     # Main du joueur2
     for j in range(0, 7):
@@ -89,7 +89,7 @@ def game():
                             card_from_hand_to_deck2[7],
                             card_from_hand_to_deck2[8])
         joueur2.hand.append(card_to_add2)
-        deck_joueur2.del_card_from_deck(card_from_hand_to_deck2)
+        # deck_joueur2.del_card_from_deck(card_from_hand_to_deck2)
 
     # print('cartes du deck :')
     # for card_in_deck in deck_joueur1.get_cards_from_deck():
@@ -113,17 +113,13 @@ def game():
                 for i in range(0, 6):
                     if hand1[i].collidepoint((mx, my)) and event.button == 1:
                         print('Clic sur la ' + str(i+1) + 'eme carte de ma main du joueur 1')
-                        print(joueur1.hand[i].name)
+                        print('discard ' + joueur1.hand[i].name)
+                        joueur1.hand.remove(joueur1.hand[i])
+
                     if hand2[i].collidepoint((mx, my)) and event.button == 1:
                         print('Clic sur la ' + str(i+1) + 'eme carte de ma main du joueur 2')
-                        print(joueur2.hand[i].name)
-                #
-                # if event.button == 1:
-                #     print('clic gauche')
-                # if event.button == 2:
-                #     print('clic central')
-                # if event.button == 3:
-                #     print('clic droit')
+                        print('discard ' + joueur2.hand[i].name)
+                        joueur2.hand.remove(joueur2.hand[i])
 
         pygame.display.update()
 
@@ -180,7 +176,7 @@ def print_hand(joueur):
         x = 50
         y = 580
 
-        for i in range(0, 6):
+        for i in range(0, len(joueur.get_player_hand())):
             hand1[i] = pygame.Rect(x, y, 150, 200)
             pygame.draw.rect(screen, (192, 192, 192), hand1[i])
 
@@ -211,7 +207,7 @@ def print_hand(joueur):
         x = 50
         y = 125
 
-        for i in range(0, 6):
+        for i in range(0, len(joueur.get_player_hand())):
             hand2[i] = pygame.Rect(x, y, 150, 200)
             pygame.draw.rect(screen, (192, 192, 192), hand2[i])
 
