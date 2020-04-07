@@ -20,6 +20,7 @@ font_text_small = pygame.font.SysFont('Comic Sans MS', 12)
 
 hand1 = {}
 hand2 = {}
+player1_username = ''
 
 heart = pygame.image.load("ressources/images/heart.png").convert_alpha()
 heart_small = pygame.transform.scale(heart, (44, 40))
@@ -52,10 +53,14 @@ fond_carte_pa_small  = pygame.image.load("ressources/fonds de cartes/fond_carte_
 
 
 def game():
+    get_username()
+
     cards = mysql_connexion.readCards()
     deck_joueur1 = Deck('Deck de test 1')
     deck_joueur2 = Deck('Deck de test 2')
-    joueur1 = Player(1, 'Atrylon')
+
+
+    joueur1 = Player(1, player1_username)
     joueur2 = Player(2, 'Ordinateur')
 
     for card in cards:
@@ -110,16 +115,17 @@ def game():
                 if event.key == K_ESCAPE:
                     continuer = False
             if event.type == MOUSEBUTTONDOWN:
-                for i in range(0, 6):
-                    if hand1[i].collidepoint((mx, my)) and event.button == 1:
+                for i in range(0, len(joueur1.get_player_hand())):
+                    if hand1[i].collidepoint((mx, my)) and event.button == 1 and joueur1.hand[i]:
                         print('Clic sur la ' + str(i+1) + 'eme carte de ma main du joueur 1')
                         print('discard ' + joueur1.hand[i].name)
                         joueur1.hand.remove(joueur1.hand[i])
 
-                    if hand2[i].collidepoint((mx, my)) and event.button == 1:
-                        print('Clic sur la ' + str(i+1) + 'eme carte de ma main du joueur 2')
-                        print('discard ' + joueur2.hand[i].name)
-                        joueur2.hand.remove(joueur2.hand[i])
+                for j in range(0, len(joueur2.get_player_hand())):
+                    if hand2[j].collidepoint((mx, my)) and event.button == 1 and joueur2.hand[j]:
+                        print('Clic sur la ' + str(j+1) + 'eme carte de ma main du joueur 2')
+                        print('discard ' + joueur2.hand[j].name)
+                        joueur2.hand.remove(joueur2.hand[j])
 
         pygame.display.update()
 
@@ -233,3 +239,50 @@ def print_hand(joueur):
                 screen.blit(heart_very_small, (x + 105, y + 102))
 
             x += 175
+
+
+def get_username():
+    font = pygame.font.Font(None, 70)
+    input_box = pygame.Rect(400, 445, 350, 65)
+    color_inactive = pygame.Color('lightskyblue3')
+    color_active = pygame.Color('dodgerblue2')
+    color = color_inactive
+    global player1_username
+    active = False
+    text = ''
+    done = False
+
+    while not done:
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                # If the user clicked on the input_box rect.
+                if input_box.collidepoint(event.pos):
+                    # Toggle the active variable.
+                    active = not active
+                else:
+                    active = False
+                # Change the current color of the input box.
+                color = color_active if active else color_inactive
+            if event.type == pygame.KEYDOWN:
+                if active:
+                    if event.key == pygame.K_RETURN:
+                        player1_username = text
+                        done = True
+                    elif event.key == pygame.K_BACKSPACE:
+                        text = text[:-1]
+                    else:
+                        text += event.unicode
+
+        screen.fill((30, 30, 30))
+        # Render the current text.
+        text_tools.draw_text("Votre pseudo :", font, pygame.Color('dodgerblue2'), screen, 50, 455)
+        txt_surface = font.render(text, True, color)
+        # Resize the box if the text is too long.
+        width = max(350, txt_surface.get_width() + 10)
+        input_box.w = width
+        # Blit the text.
+        screen.blit(txt_surface, (input_box.x + 5, input_box.y + 5))
+        # Blit the input_box rect.
+        pygame.draw.rect(screen, color, input_box, 2)
+
+        pygame.display.flip()
