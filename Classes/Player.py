@@ -1,7 +1,7 @@
 class Player:
     def __init__(self, index, name):
         # Joueur 1 ou Joueur 2
-        self.index = index
+        self.player_index = index
         self.name = name
         self.hp = 100
         self.shield = 30
@@ -21,3 +21,10 @@ class Player:
     def changeShield(self, shield_change):
         self.shield = self.shield - shield_change
         print("Vous avez actuellement " + self.shield + " points de bouclier !")
+
+    def get_player_index(self):
+        return self.player_index
+
+    def get_player_hand(self):
+        return self.hand
+
