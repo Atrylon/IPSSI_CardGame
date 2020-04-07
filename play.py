@@ -18,6 +18,8 @@ font_title = pygame.font.SysFont('Helvetic', 75)
 font_text = pygame.font.SysFont('Comic Sans MS,Arial', 15)
 font_text_small = pygame.font.SysFont('Comic Sans MS', 12)
 
+hand1 = {}
+hand2 = {}
 
 heart = pygame.image.load("ressources/images/heart.png").convert_alpha()
 heart_small = pygame.transform.scale(heart, (44, 40))
@@ -51,8 +53,6 @@ fond_carte_pa_small  = pygame.image.load("ressources/fonds de cartes/fond_carte_
 
 def game():
     cards = mysql_connexion.readCards()
-
-    mx, my = pygame.mouse.get_pos()
     deck_joueur1 = Deck('Deck de test 1')
     deck_joueur2 = Deck('Deck de test 2')
     joueur1 = Player(1, 'Atrylon')
@@ -97,7 +97,7 @@ def game():
 
     continuer = True
     while continuer:
-
+        mx, my = pygame.mouse.get_pos()
         game_interface(joueur1, joueur2)
         print_hand(joueur1)
         print_hand(joueur2)
@@ -110,7 +110,18 @@ def game():
                 if event.key == K_ESCAPE:
                     continuer = False
             if event.type == MOUSEBUTTONDOWN:
-                print('click')
+                for i in range(0, 6):
+                    if hand1[i].collidepoint((mx, my)) and event.button == 1:
+                        print('Clic sur la ' + str(i+1) + 'eme carte de ma main du joueur 1')
+                    if hand2[i].collidepoint((mx, my)) and event.button == 1:
+                        print('Clic sur la ' + str(i+1) + 'eme carte de ma main du joueur 2')
+                #
+                # if event.button == 1:
+                #     print('clic gauche')
+                # if event.button == 2:
+                #     print('clic central')
+                # if event.button == 3:
+                #     print('clic droit')
 
         pygame.display.update()
 
@@ -160,9 +171,10 @@ def game_interface(joueur1, joueur2):
 def print_hand(joueur):
     position = joueur.get_player_index()
     player_hand = joueur.get_player_hand()
+    global hand1
+    global hand2
 
     if position == 1:
-        hand1 = {}
         x = 50
         y = 580
 
@@ -194,7 +206,6 @@ def print_hand(joueur):
             x += 175
 
     elif position == 2:
-        hand2 = {}
         x = 50
         y = 125
 
