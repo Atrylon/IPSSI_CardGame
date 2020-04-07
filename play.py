@@ -113,8 +113,10 @@ def game():
                 for i in range(0, 6):
                     if hand1[i].collidepoint((mx, my)) and event.button == 1:
                         print('Clic sur la ' + str(i+1) + 'eme carte de ma main du joueur 1')
+                        print(joueur1.hand[i].name)
                     if hand2[i].collidepoint((mx, my)) and event.button == 1:
                         print('Clic sur la ' + str(i+1) + 'eme carte de ma main du joueur 2')
+                        print(joueur2.hand[i].name)
                 #
                 # if event.button == 1:
                 #     print('clic gauche')
