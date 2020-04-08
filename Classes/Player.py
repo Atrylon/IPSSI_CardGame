@@ -14,11 +14,14 @@ class Player:
         self.action_generation = 1
         self.action_stock = 0
 
-    def changeHP(self, hp_change):
+    def change_name(self, name):
+        self.name = name
+
+    def change_hP(self, hp_change):
         self.hp = self.hp - hp_change
         print("Vous avez actuellement " + self.hp + " pvs !")
 
-    def changeShield(self, shield_change):
+    def change_shield(self, shield_change):
         self.shield = self.shield - shield_change
         print("Vous avez actuellement " + self.shield + " points de bouclier !")
 

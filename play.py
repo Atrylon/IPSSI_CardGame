@@ -18,6 +18,12 @@ font_title = pygame.font.SysFont('Helvetic', 75)
 font_text = pygame.font.SysFont('Comic Sans MS,Arial', 15)
 font_text_small = pygame.font.SysFont('Comic Sans MS', 12)
 
+joueur1 = Player(1, '')
+joueur2 = Player(2, 'Ordinateur')
+
+deck_list_cards = Deck('Liste de toutes les cartes')
+deck_joueur1 = Deck('Deck de test 1')
+deck_joueur2 = Deck('Deck de test 2')
 hand1 = {}
 hand2 = {}
 player1_username = ''
@@ -45,6 +51,9 @@ pa = pygame.image.load("ressources/images/action.png").convert_alpha()
 pa_small = pygame.transform.scale(pa, (40, 40))
 pa_very_small = pygame.transform.scale(pa, (23, 23))
 
+deck = pygame.image.load("ressources/images/deck.png").convert_alpha()
+deck_small = pygame.transform.scale(deck, (40, 40))
+
 fond_carte_po = pygame.image.load("ressources/fonds de cartes/fond_carte_13.png").convert_alpha()
 fond_carte_pm = pygame.image.load("ressources/fonds de cartes/fond_carte_11.png").convert_alpha()
 fond_carte_pa = pygame.image.load("ressources/fonds de cartes/fond_carte_09.png").convert_alpha()
@@ -56,17 +65,36 @@ fond_carte_pa_small = pygame.image.load("ressources/fonds de cartes/fond_carte_0
 
 
 def game():
+    global joueur1
+    global joueur2
+    global tour
+    global deck_joueur1
+    global deck_joueur2
+    global deck_list_cards
+
+    def add_card_to_hand(deck, joueur, delete=False):
+        card_from_hand_to_deck = random.choice(deck.get_cards_from_deck())
+        card_to_add = Card(card_from_hand_to_deck[1],
+                           card_from_hand_to_deck[2],
+                           card_from_hand_to_deck[3],
+                           card_from_hand_to_deck[4],
+                           card_from_hand_to_deck[5],
+                           card_from_hand_to_deck[6],
+                           card_from_hand_to_deck[7],
+                           card_from_hand_to_deck[8])
+        joueur.hand.append(card_to_add)
+
+        if delete :
+            deck.del_card_from_deck(card_from_hand_to_deck)
+
     get_username()
 
-    global tour
+    joueur1.change_name(player1_username)
+    joueur1.add_action_to_stock()
+    joueur1.add_gold_to_stock()
+    joueur1.add_mana_to_stock()
 
     cards = mysql_connexion.readCards()
-    deck_list_cards = Deck('Liste de toutes les cartes')
-    deck_joueur1 = Deck('Deck de test 1')
-    deck_joueur2 = Deck('Deck de test 2')
-
-    joueur1 = Player(1, player1_username)
-    joueur2 = Player(2, 'Ordinateur')
 
     for card in cards:
         deck_list_cards.add_card_to_deck(card)
@@ -83,31 +111,12 @@ def game():
     # On remplit la main de départ des joueurs
     # Main du joueur1
     for i in range(0, 7):
-        card_from_hand_to_deck = random.choice(deck_joueur1.get_cards_from_deck())
-        card_to_add = Card(card_from_hand_to_deck[1],
-                           card_from_hand_to_deck[2],
-                           card_from_hand_to_deck[3],
-                           card_from_hand_to_deck[4],
-                           card_from_hand_to_deck[5],
-                           card_from_hand_to_deck[6],
-                           card_from_hand_to_deck[7],
-                           card_from_hand_to_deck[8])
-        joueur1.hand.append(card_to_add)
+        add_card_to_hand(deck_joueur1, joueur1)
         # deck_joueur1.del_card_from_deck(card_from_hand_to_deck)
 
     # Main du joueur2
     for j in range(0, 7):
-        card_from_hand_to_deck2 = random.choice(deck_joueur2.get_cards_from_deck())
-        card_to_add2 = Card(card_from_hand_to_deck2[1],
-                            card_from_hand_to_deck2[2],
-                            card_from_hand_to_deck2[3],
-                            card_from_hand_to_deck2[4],
-                            card_from_hand_to_deck2[5],
-                            card_from_hand_to_deck2[6],
-                            card_from_hand_to_deck2[7],
-                            card_from_hand_to_deck2[8])
-        joueur2.hand.append(card_to_add2)
-        # deck_joueur2.del_card_from_deck(card_from_hand_to_deck2)
+        add_card_to_hand(deck_joueur2, joueur2)
 
     print(str(deck_joueur1.get_nb_cards_in_deck()) + ' cartes dans le deck - Liste des cartes du deck :')
     for card_in_deck in deck_joueur1.get_cards_from_deck():
@@ -158,6 +167,9 @@ def game():
                             print('discard ' + joueur1.hand[i].name)
                             joueur1.hand.remove(joueur1.hand[i])
 
+                            if deck_joueur1.get_nb_cards_in_deck() > 0:
+                                add_card_to_hand(deck_joueur1, joueur1, True)
+
                 elif tour % 2 == 0:
                     for j in range(0, len(joueur2.get_player_hand())):
                         # On joue la carte avec le bouton gauche
@@ -184,6 +196,9 @@ def game():
                             print('Clic sur la ' + str(j+1) + 'eme carte de ma main du joueur 2')
                             print('discard ' + joueur2.hand[j].name)
                             joueur2.hand.remove(joueur2.hand[j])
+
+                            if deck_joueur2.get_nb_cards_in_deck() > 0:
+                                add_card_to_hand(deck_joueur2, joueur2, True)
 
                 if rect_end_turn.collidepoint((mx, my)) and event.button == 1:
                     print('Fin du tour')
@@ -251,6 +266,13 @@ def game_interface(joueur1, joueur2):
     text_tools.draw_text(str(joueur1.action_stock), font_text, (0, 0, 0), screen, 890, 870)
     text_tools.draw_text('(+' + str(joueur1.action_generation) + ')', font_text, (0, 0, 0), screen, 910, 870)
     screen.blit(pa_small, (900, 830))
+
+    text_tools.draw_text(str(deck_joueur2.get_nb_cards_in_deck()) + ' card(s) left', font_text, (0, 0, 0), screen, 1100,
+                         60)
+    screen.blit(deck_small, (1120, 20))
+    text_tools.draw_text(str(deck_joueur1.get_nb_cards_in_deck()) + ' card(s) left', font_text, (0, 0, 0), screen, 1100,
+                         870)
+    screen.blit(deck_small, (1120, 830))
 
 
 def print_hand(joueur):
