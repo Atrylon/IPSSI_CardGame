@@ -72,6 +72,8 @@ def game():
     global deck_joueur2
     global deck_list_cards
 
+    progressing = True
+
     def add_card_to_hand(deck, joueur, delete=False):
         card_from_hand_to_deck = random.choice(deck.get_cards_from_deck())
         card_to_add = Card(card_from_hand_to_deck[1],
@@ -86,6 +88,22 @@ def game():
 
         if delete :
             deck.del_card_from_deck(card_from_hand_to_deck)
+
+    def end_turn():
+        global tour
+        print('Fin du tour')
+        print('Tour ' + str(tour))
+
+        if tour % 2 == 0:
+            joueur1.add_action_to_stock()
+            joueur1.add_gold_to_stock()
+            joueur1.add_mana_to_stock()
+        elif tour % 2 == 1:
+            joueur2.add_action_to_stock()
+            joueur2.add_gold_to_stock()
+            joueur2.add_mana_to_stock()
+
+        tour += 1
 
     get_username()
 
@@ -137,27 +155,111 @@ def game():
                 if event.key == K_ESCAPE:
                     continuer = False
             if event.type == MOUSEBUTTONDOWN:
-
                 if tour % 2 == 1:
                     for i in range(0, len(joueur1.get_player_hand())):
                         # On joue la carte avec le bouton gauche
                         if hand1[i].collidepoint((mx, my)) and event.button == 1 and joueur1.hand[i]:
                             if joueur1.hand[i].ressource_type == 'PA':
                                 if joueur1.action_stock >= joueur1.hand[i].cost:
-                                    print('Vous pouvez jouer la carte')
+                                    # print('Vous pouvez jouer la carte')
+                                    if joueur1.hand[i].effect == 'Shield':
+                                        if joueur1.hand[i].target == 'Self':
+                                            print('Le joueur 1 gagne ' + str(joueur1.hand[i].value) + ' points de shield')
+                                            joueur1.shield += joueur1.hand[i].value
+                                        elif joueur2.shield > abs(joueur1.hand[i].value):
+                                            joueur2.shield += joueur1.hand[i].value
+                                            print('Le joueur 2 perd ' + str(abs(joueur1.hand[i].value)) + ' points de shield')
+                                    elif joueur1.hand[i].effect == 'Life':
+                                        if joueur1.hand[i].target == 'Self':
+                                            print('Le joueur 1 gagne ' + str(joueur1.hand[i].value) + ' points de vie')
+                                            joueur1.hp += joueur1.hand[i].value
+                                        elif joueur2.hp > abs(joueur1.hand[i].value):
+                                            joueur2.hp += joueur1.hand[i].value
+                                            print('Le joueur 2 perd ' + str(abs(joueur1.hand[i].value)) + ' points de vie')
+                                        elif joueur2.hp <= abs(joueur1.hand[i].value):
+                                            joueur2.hp += joueur1.hand[i].value
+                                            print('Le joueur 2 perd ' + str(abs(joueur1.hand[i].value)) + ' points de vie')
+                                            print('Le joueur 2 n\'a plus de points de vie ! Le joueur 1 remporte la partie !')
+
+                                    joueur1.action_stock -= joueur1.hand[i].cost
+                                    joueur1.hand.remove(joueur1.hand[i])
+
+                                    if deck_joueur1.get_nb_cards_in_deck() > 0:
+                                        add_card_to_hand(deck_joueur1, joueur1, True)
+                                    else:
+                                        print('Le joueur n\'a plus de cartes dans son deck !')
+                                    end_turn()
+                                    print(str(tour))
                                 else:
                                     print('Pas assez de ressouces')
                             elif joueur1.hand[i].ressource_type == 'PM':
                                 if joueur1.mana_stock >= joueur1.hand[i].cost:
-                                    print('Vous pouvez jouer la carte')
+                                    # print('Vous pouvez jouer la carte')
+                                    if joueur1.hand[i].effect == 'Shield':
+                                        if joueur1.hand[i].target == 'Self':
+                                            print('Le joueur 1 gagne ' + str(joueur1.hand[i].value) + ' points de shield')
+                                            joueur1.shield += joueur1.hand[i].value
+                                        elif joueur2.shield > abs(joueur1.hand[i].value):
+                                            joueur2.shield += joueur1.hand[i].value
+                                            print('Le joueur 2 perd ' + str(abs(joueur1.hand[i].value)) + ' points de shield')
+                                    elif joueur1.hand[i].effect == 'Life':
+                                        if joueur1.hand[i].target == 'Self':
+                                            print('Le joueur 1 gagne ' + str(joueur1.hand[i].value) + ' points de vie')
+                                            joueur1.hp += joueur1.hand[i].value
+                                        elif joueur2.hp > abs(joueur1.hand[i].value):
+                                            joueur2.hp += joueur1.hand[i].value
+                                            print('Le joueur 2 perd ' + str(abs(joueur1.hand[i].value)) + ' points de vie')
+                                        elif joueur2.hp <= abs(joueur1.hand[i].value):
+                                            joueur2.hp += joueur1.hand[i].value
+                                            print('Le joueur 2 perd ' + str(abs(joueur1.hand[i].value)) + ' points de vie')
+                                            print('Le joueur 2 n\'a plus de points de vie ! Le joueur 1 remporte la partie !')
+
+                                    joueur1.mana_stock -= joueur1.hand[i].cost
+                                    joueur1.hand.remove(joueur1.hand[i])
+
+                                    if deck_joueur1.get_nb_cards_in_deck() > 0:
+                                        add_card_to_hand(deck_joueur1, joueur1, True)
+                                    else:
+                                        print('Le joueur n\'a plus de cartes dans son deck !')
+
+                                    end_turn()
+                                    print(str(tour))
                                 else:
                                     print('Pas assez de ressouces')
                             elif joueur1.hand[i].ressource_type == 'PO':
                                 if joueur1.gold_stock >= joueur1.hand[i].cost:
-                                    print('Vous pouvez jouer la carte')
+                                    # print('Vous pouvez jouer la carte')
+                                    if joueur1.hand[i].effect == 'Shield':
+                                        if joueur1.hand[i].target == 'Self':
+                                            print('Le joueur 1 gagne ' + str(joueur1.hand[i].value) + ' points de shield')
+                                            joueur1.shield += joueur1.hand[i].value
+                                        elif joueur2.shield > abs(joueur1.hand[i].value):
+                                            joueur2.shield += joueur1.hand[i].value
+                                            print('Le joueur 2 perd ' + str(abs(joueur1.hand[i].value)) + ' points de shield')
+                                    elif joueur1.hand[i].effect == 'Life':
+                                        if joueur1.hand[i].target == 'Self':
+                                            print('Le joueur 1 gagne ' + str(joueur1.hand[i].value) + ' points de vie')
+                                            joueur1.hp += joueur1.hand[i].value
+                                        elif joueur2.hp > abs(joueur1.hand[i].value):
+                                            joueur2.hp += joueur1.hand[i].value
+                                            print('Le joueur 2 perd ' + str(abs(joueur1.hand[i].value)) + ' points de vie')
+                                        elif joueur2.hp <= abs(joueur1.hand[i].value):
+                                            joueur2.hp += joueur1.hand[i].value
+                                            print('Le joueur 2 perd ' + str(abs(joueur1.hand[i].value)) + ' points de vie')
+                                            print('Le joueur 2 n\'a plus de points de vie ! Le joueur 1 remporte la partie !')
+
+                                    joueur1.gold_stock -= joueur1.hand[i].cost
+                                    joueur1.hand.remove(joueur1.hand[i])
+
+                                    if deck_joueur1.get_nb_cards_in_deck() > 0:
+                                        add_card_to_hand(deck_joueur1, joueur1, True)
+                                    else:
+                                        print('Le joueur n\'a plus de cartes dans son deck !')
+
+                                    end_turn()
+                                    print(str(tour))
                                 else:
                                     print('Pas assez de ressouces')
-
                                 # print()
                                 # joueur1.hand.remove(joueur1.hand[i])
 
@@ -170,23 +272,107 @@ def game():
                             if deck_joueur1.get_nb_cards_in_deck() > 0:
                                 add_card_to_hand(deck_joueur1, joueur1, True)
 
+                            end_turn()
+                            print(str(tour))
+
                 elif tour % 2 == 0:
                     for j in range(0, len(joueur2.get_player_hand())):
                         # On joue la carte avec le bouton gauche
                         if hand2[j].collidepoint((mx, my)) and event.button == 1 and joueur2.hand[j]:
                             if joueur2.hand[j].ressource_type == 'PA':
-                                if joueur2.action_stock >= joueur2.hand[i].cost:
-                                    print('Vous pouvez jouer la carte')
+                                if joueur2.action_stock >= joueur2.hand[j].cost:
+                                    # print('Vous pouvez jouer la carte')
+                                    if joueur2.hand[j].effect == 'Shield':
+                                        if joueur2.hand[j].target == 'Self':
+                                            print('Le joueur 2 gagne ' + str(joueur2.hand[j].value) + ' points de shield')
+                                            joueur2.shield += joueur2.hand[j].value
+                                        elif joueur1.shield > abs(joueur2.hand[j].value):
+                                            joueur1.shield += joueur2.hand[j].value
+                                            print('Le joueur 1 perd ' + str(abs(joueur2.hand[j].value)) + ' points de shield')
+                                    elif joueur2.hand[j].effect == 'Life':
+                                        if joueur2.hand[j].target == 'Self':
+                                            print('Le joueur 2 gagne ' + str(joueur2.hand[j].value) + ' points de vie')
+                                            joueur2.hp += joueur2.hand[j].value
+                                        elif joueur1.hp > abs(joueur2.hand[j].value):
+                                            joueur1.hp += joueur2.hand[j].value
+                                            print('Le joueur 1 perd ' + str(abs(joueur2.hand[j].value)) + ' points de vie')
+                                        elif joueur1.hp <= abs(joueur2.hand[j].value):
+                                            joueur1.hp += joueur2.hand[j].value
+                                            print('Le joueur 1 perd ' + str(abs(joueur2.hand[j].value)) + ' points de vie')
+                                            print('Le joueur 1 n\'a plus de points de vie ! Le joueur 2 remporte la partie !')
+                                    joueur2.action_stock -= joueur2.hand[j].cost
+                                    joueur2.hand.remove(joueur2.hand[j])
+                                    if deck_joueur2.get_nb_cards_in_deck() > 0:
+                                        add_card_to_hand(deck_joueur2, joueur2, True)
+                                    else:
+                                        print('Le joueur n\'a plus de cartes dans son deck !')
+
+                                    end_turn()
+                                    print(str(tour))
                                 else:
                                     print('Pas assez de ressouces')
                             elif joueur2.hand[j].ressource_type == 'PM':
-                                if joueur2.mana_stock >= joueur2.hand[i].cost:
-                                    print('Vous pouvez jouer la carte')
+                                if joueur2.mana_stock >= joueur2.hand[j].cost:
+                                    # print('Vous pouvez jouer la carte')
+                                    if joueur2.hand[j].effect == 'Shield':
+                                        if joueur2.hand[j].target == 'Self':
+                                            print('Le joueur 2 gagne ' + str(joueur2.hand[j].value) + ' points de shield')
+                                            joueur2.shield += joueur2.hand[j].value
+                                        elif joueur1.shield > abs(joueur2.hand[j].value):
+                                            joueur1.shield += joueur2.hand[j].value
+                                            print('Le joueur 1 perd ' + str(abs(joueur2.hand[j].value)) + ' points de shield')
+                                    elif joueur2.hand[j].effect == 'Life':
+                                        if joueur2.hand[j].target == 'Self':
+                                            print('Le joueur 2 gagne ' + str(joueur2.hand[j].value) + ' points de vie')
+                                            joueur2.hp += joueur2.hand[j].value
+                                        elif joueur1.hp > abs(joueur2.hand[j].value):
+                                            joueur1.hp += joueur2.hand[j].value
+                                            print('Le joueur 1 perd ' + str(abs(joueur2.hand[j].value)) + ' points de vie')
+                                        elif joueur1.hp <= abs(joueur2.hand[j].value):
+                                            joueur1.hp += joueur2.hand[j].value
+                                            print('Le joueur 1 perd ' + str(abs(joueur2.hand[j].value)) + ' points de vie')
+                                            print('Le joueur 1 n\'a plus de points de vie ! Le joueur 2 remporte la partie !')
+                                    joueur2.mana_stock -= joueur2.hand[j].cost
+                                    joueur2.hand.remove(joueur2.hand[j])
+                                    if deck_joueur2.get_nb_cards_in_deck() > 0:
+                                        add_card_to_hand(deck_joueur2, joueur2, True)
+                                    else:
+                                        print('Le joueur n\'a plus de cartes dans son deck !')
+
+                                    end_turn()
+                                    print(str(tour))
                                 else:
                                     print('Pas assez de ressouces')
                             elif joueur2.hand[j].ressource_type == 'PO':
-                                if joueur2.gold_stock >= joueur2.hand[i].cost:
-                                    print('Vous pouvez jouer la carte')
+                                if joueur2.gold_stock >= joueur2.hand[j].cost:
+                                    # print('Vous pouvez jouer la carte')
+                                    if joueur2.hand[j].effect == 'Shield':
+                                        if joueur2.hand[j].target == 'Self':
+                                            print('Le joueur 2 gagne ' + str(joueur2.hand[j].value) + ' points de shield')
+                                            joueur2.shield += joueur2.hand[j].value
+                                        elif joueur1.shield > abs(joueur2.hand[j].value):
+                                            joueur1.shield += joueur2.hand[j].value
+                                            print('Le joueur 1 perd ' + str(abs(joueur2.hand[j].value)) + ' points de shield')
+                                    elif joueur2.hand[j].effect == 'Life':
+                                        if joueur2.hand[j].target == 'Self':
+                                            print('Le joueur 2 gagne ' + str(joueur2.hand[j].value) + ' points de vie')
+                                            joueur2.hp += joueur2.hand[j].value
+                                        elif joueur1.hp > abs(joueur2.hand[j].value):
+                                            joueur1.hp += joueur2.hand[j].value
+                                            print('Le joueur 1 perd ' + str(abs(joueur2.hand[j].value)) + ' points de vie')
+                                        elif joueur1.hp <= abs(joueur2.hand[j].value):
+                                            joueur1.hp += joueur2.hand[j].value
+                                            print('Le joueur 1 perd ' + str(abs(joueur2.hand[j].value)) + ' points de vie')
+                                            print('Le joueur 1 n\'a plus de points de vie ! Le joueur 2 remporte la partie !')
+                                    joueur2.gold_stock -= joueur2.hand[j].cost
+                                    joueur2.hand.remove(joueur2.hand[j])
+                                    if deck_joueur2.get_nb_cards_in_deck() > 0:
+                                        add_card_to_hand(deck_joueur2, joueur2, True)
+                                    else:
+                                        print('Le joueur n\'a plus de cartes dans son deck !')
+
+                                    end_turn()
+                                    print(str(tour))
                                 else:
                                     print('Pas assez de ressouces')
                             # joueur2.hand.remove(joueur2.hand[j])
@@ -200,20 +386,12 @@ def game():
                             if deck_joueur2.get_nb_cards_in_deck() > 0:
                                 add_card_to_hand(deck_joueur2, joueur2, True)
 
+                            end_turn()
+                            print(str(tour))
+
                 if rect_end_turn.collidepoint((mx, my)) and event.button == 1:
-                    print('Fin du tour')
-                    print('Tour ' + str(tour))
-
-                    if tour % 2 == 0:
-                        joueur1.add_action_to_stock()
-                        joueur1.add_gold_to_stock()
-                        joueur1.add_mana_to_stock()
-                    elif tour % 2 == 1:
-                        joueur2.add_action_to_stock()
-                        joueur2.add_gold_to_stock()
-                        joueur2.add_mana_to_stock()
-
-                    tour += 1
+                    end_turn()
+                    print(str(tour))
 
         pygame.display.update()
 
