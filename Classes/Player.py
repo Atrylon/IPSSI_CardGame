@@ -1,7 +1,7 @@
 class Player:
     def __init__(self, index, name):
         # Joueur 1 ou Joueur 2
-        self.index = index
+        self.player_index = index
         self.name = name
         self.hp = 100
         self.shield = 30
@@ -14,10 +14,28 @@ class Player:
         self.action_generation = 1
         self.action_stock = 0
 
-    def changeHP(self, hp_change):
+    def change_name(self, name):
+        self.name = name
+
+    def change_hP(self, hp_change):
         self.hp = self.hp - hp_change
         print("Vous avez actuellement " + self.hp + " pvs !")
 
-    def changeShield(self, shield_change):
+    def change_shield(self, shield_change):
         self.shield = self.shield - shield_change
         print("Vous avez actuellement " + self.shield + " points de bouclier !")
+
+    def get_player_index(self):
+        return self.player_index
+
+    def get_player_hand(self):
+        return self.hand
+
+    def add_gold_to_stock(self):
+        self.gold_stock = self.gold_stock + self.gold_generation
+
+    def add_mana_to_stock(self):
+        self.mana_stock = self.mana_stock + self.mana_generation
+
+    def add_action_to_stock(self):
+        self.action_stock = self.action_stock + self.action_generation

@@ -84,6 +84,8 @@ def rules():
         text_tools.draw_text('Règles', font_title, (0, 0, 0), screen, 20, 20)
 
         rules = """Le but du jeu est de se défaire de son adversaire et ainsi d'être le dernier des deux joueurs en vie.
+Chaque joueur possède un maximum de 100 PVs et 30 de boucliers. 
+Des dégats supplémentaires sont infligés en cas de nombre de points de bouclier réduits.
 
 Vous jouez avec un deck de 32 cartes et une main composée de 7 cartes au maximum.
 
