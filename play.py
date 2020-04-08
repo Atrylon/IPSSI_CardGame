@@ -1,6 +1,7 @@
 import sys
 import pygame
 import random
+import time
 from pygame.locals import *
 
 import mysql_connexion
@@ -93,15 +94,26 @@ def game():
         print('Tour ' + str(tour))
 
         if tour % 2 == 0:
+            rect_end_turn = pygame.Rect(10, 400, 1260, 100)
+            pygame.draw.rect(screen, (0, 0, 0), rect_end_turn)
+            text_tools.draw_text('Tour ' + str(tour+1) + ' - C\'est au joueur 1 de jouer !', font_title, (255, 255, 255), screen, 250, 420)
+            pygame.display.flip()
             joueur1.add_action_to_stock()
             joueur1.add_gold_to_stock()
             joueur1.add_mana_to_stock()
         elif tour % 2 == 1:
+            rect_end_turn = pygame.Rect(10, 400, 1260, 100)
+            pygame.draw.rect(screen, (0, 0, 0), rect_end_turn)
+            text_tools.draw_text('Tour ' + str(tour+1) + ' - C\'est au joueur 2 de jouer !', font_title, (255, 255, 255), screen, 250, 420)
+            pygame.display.flip()
+
             joueur2.add_action_to_stock()
             joueur2.add_gold_to_stock()
             joueur2.add_mana_to_stock()
-
         tour += 1
+        time.sleep(2)
+
+
 
     def action_depending_of_card(player, enemy, player_hand, player_deck):
         bonus_damages = 0
