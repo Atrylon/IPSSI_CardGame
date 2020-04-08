@@ -14,3 +14,7 @@ class Deck:
 
     def del_card_from_deck(self, card):
         self.cards.remove(card)
+
+    def get_nb_cards_in_deck(self):
+        return len(self.cards)
+

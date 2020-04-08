@@ -28,3 +28,11 @@ class Player:
     def get_player_hand(self):
         return self.hand
 
+    def add_gold_to_stock(self):
+        self.gold_stock = self.gold_stock + self.gold_generation
+
+    def add_mana_to_stock(self):
+        self.mana_stock = self.mana_stock + self.mana_generation
+
+    def add_action_to_stock(self):
+        self.action_stock = self.action_stock + self.action_generation
