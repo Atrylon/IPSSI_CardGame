@@ -2,8 +2,7 @@ import sys
 import pygame
 from pygame.locals import *
 
-import mysql_connexion
-import text_tools
+import text_tools, mysql_connexion
 
 screen = pygame.display.set_mode((1280, 910))
 card_cadre = pygame.display.set_mode((275, 350))
@@ -68,10 +67,10 @@ def cards_list():
             if nb_cards > n+3:
                 screen.blit(right_arrow_small, (1225, 430))
 
-            text_tools.draw_text(card[1], font_text, (0, 0, 0), screen, x+50, y+20)
-            text_tools.draw_text('Cost : ' + str(card[3]) + ' ' + card[2], font_text, (0, 0, 0), screen, x+50, y+100)
-            text_tools.draw_text('Effect : ' + str(card[5]) + ' ' + card[6] + ' ' + card[4], font_text, (0, 0, 0), screen, x+50, y+175)
-            text_tools.draw_text('Rarity : ' + card[7], font_text, (0, 0, 0), screen, x+50, y+250)
+            text_tools.draw_text(card[1], font_text, (0, 0, 0), screen, x + 50, y + 20)
+            text_tools.draw_text('Cost : ' + str(card[3]) + ' ' + card[2], font_text, (0, 0, 0), screen, x + 50, y + 100)
+            text_tools.draw_text('Effect : ' + str(card[5]) + ' ' + card[6] + ' ' + card[4], font_text, (0, 0, 0), screen, x + 50, y + 175)
+            text_tools.draw_text('Rarity : ' + card[7], font_text, (0, 0, 0), screen, x + 50, y + 250)
 
             # text_tools.blit_text(card_cadre, card[8], (x+50, y+100), font_text)
 
