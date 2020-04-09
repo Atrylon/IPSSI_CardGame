@@ -12,7 +12,7 @@ Steps to install this project :
 * Enjoy
 
 
-#####OPTIONNAL
+##### OPTIONNAL
 You can use the sql file to get some base cards to try the game
 
 
