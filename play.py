@@ -16,11 +16,12 @@ pygame.font.init()
 
 screen = pygame.display.set_mode((1280, 910))
 font_title = pygame.font.SysFont('Helvetic', 75)
+font_retour = pygame.font.SysFont('Comic Sans MS,Arial', 30)
 font_text = pygame.font.SysFont('Comic Sans MS,Arial', 15)
 font_text_small = pygame.font.SysFont('Comic Sans MS', 12)
 
 joueur1 = Player(1, '')
-joueur2 = Player(2, 'Ordinateur')
+joueur2 = Player(2, '')
 
 deck_list_cards = Deck('Liste de toutes les cartes')
 deck_joueur1 = Deck('Deck de test 1')
@@ -28,6 +29,7 @@ deck_joueur2 = Deck('Deck de test 2')
 hand1 = {}
 hand2 = {}
 player1_username = ''
+player2_username = ''
 rect_end_turn = None
 tour = None
 deck_len = 32
@@ -85,7 +87,7 @@ def game():
                            card_from_hand_to_deck[8])
         joueur.hand.append(card_to_add)
 
-        if delete :
+        if delete:
             deck.del_card_from_deck(card_from_hand_to_deck)
 
     def end_turn():
@@ -113,11 +115,11 @@ def game():
         tour += 1
         time.sleep(2)
 
-
-
     def action_depending_of_card(player, enemy, player_hand, player_deck):
         bonus_damages = 0
         progressing = True
+
+        rect_info = pygame.Rect(10, 400, 1260, 100)
 
         for j in range(0, len(player.get_player_hand())):
             # On joue la carte avec le bouton gauche
@@ -150,7 +152,11 @@ def game():
                                         player.shield = 30
                                     progressing = False
                                 else:
-                                    print('Vos points de bouclier sont au maximum')
+                                    pygame.draw.rect(screen, (0, 0, 0), rect_info)
+                                    text_tools.draw_text('Vos points de bouclier sont au maximum',
+                                                    font_title, (255, 255, 255), screen, 250, 420)
+                                    pygame.display.flip()
+                                    time.sleep(1)
                             elif enemy.shield > abs(player.hand[j].value):
                                 if enemy.shield > 0:
                                     enemy.shield += player.hand[j].value
@@ -159,7 +165,11 @@ def game():
                                         enemy.shield = 0
                                     progressing = False
                                 else:
-                                    print('L\'adversaire n\'a plus de bouclier !')
+                                    pygame.draw.rect(screen, (0, 0, 0), rect_info)
+                                    text_tools.draw_text('L\'adversaire n\'a plus de bouclier !',
+                                                    font_title, (255, 255, 255), screen, 250, 420)
+                                    pygame.display.flip()
+                                    time.sleep(1)
                         elif player.hand[j].effect == 'Life':
                             if player.hand[j].target == 'Self':
                                 if player.hp < 100:
@@ -169,7 +179,11 @@ def game():
                                         player.hp = 100
                                     progressing = False
                                 else:
-                                    print('Vos points de vie sont au maximum')
+                                    pygame.draw.rect(screen, (0, 0, 0), rect_info)
+                                    text_tools.draw_text('Vos points de vie sont au maximum',
+                                                    font_title, (255, 255, 255), screen, 250, 420)
+                                    pygame.display.flip()
+                                    time.sleep(1)
                             elif enemy.hp > abs(player.hand[j].value):
                                 enemy.hp += int(player.hand[j].value * (1 + bonus_damages))
                                 print('Le joueur ' + str(enemy.player_index) + ' perd ' + str(abs(int(player.hand[j].value * (1 + bonus_damages)))) + ' points de vie')
@@ -186,12 +200,20 @@ def game():
                             if player_deck.get_nb_cards_in_deck() > 0:
                                 add_card_to_hand(player_deck, player, True)
                             else:
-                                print('Le joueur n\'a plus de cartes dans son deck !')
+                                pygame.draw.rect(screen, (0, 0, 0), rect_info)
+                                text_tools.draw_text('Le joueur n\'a plus de cartes dans son deck !',
+                                                font_title, (255, 255, 255), screen, 250, 420)
+                                pygame.display.flip()
+                                time.sleep(1)
 
                             end_turn()
                         # print(str(tour))
                     else:
-                        print('Pas assez de ressouces')
+                        pygame.draw.rect(screen, (0, 0, 0), rect_info)
+                        text_tools.draw_text('Pas assez de ressouces',
+                                        font_title, (255, 255, 255), screen, 250, 420)
+                        pygame.display.flip()
+                        time.sleep(1)
                 elif player.hand[j].ressource_type == 'PM':
                     if player.mana_stock >= player.hand[j].cost:
                         # print('Vous pouvez jouer la carte')
@@ -205,7 +227,11 @@ def game():
                                         player.shield = 30
                                     progressing = False
                                 else:
-                                    print('Vos points de bouclier sont au maximum')
+                                    pygame.draw.rect(screen, (0, 0, 0), rect_info)
+                                    text_tools.draw_text('Vos points de bouclier sont au maximum',
+                                                    font_title, (255, 255, 255), screen, 250, 420)
+                                    pygame.display.flip()
+                                    time.sleep(1)
                             elif enemy.shield > abs(player.hand[j].value):
                                 if enemy.shield > 0:
                                     enemy.shield += player.hand[j].value
@@ -215,7 +241,11 @@ def game():
                                         enemy.shield = 0
                                     progressing = False
                                 else:
-                                    print('L\'adversaire n\'a plus de bouclier !')
+                                    pygame.draw.rect(screen, (0, 0, 0), rect_info)
+                                    text_tools.draw_text('L\'adversaire n\'a plus de bouclier !',
+                                                    font_title, (255, 255, 255), screen, 250, 420)
+                                    pygame.display.flip()
+                                    time.sleep(1)
                         elif player.hand[j].effect == 'Life':
                             if player.hand[j].target == 'Self':
                                 if player.hp < 100:
@@ -226,7 +256,11 @@ def game():
                                         player.hp = 100
                                     progressing = False
                                 else:
-                                    print('Vos points de vie sont au maximum')
+                                    pygame.draw.rect(screen, (0, 0, 0), rect_info)
+                                    text_tools.draw_text('Vos points de vie sont au maximum',
+                                                    font_title, (255, 255, 255), screen, 250, 420)
+                                    pygame.display.flip()
+                                    time.sleep(1)
                             elif enemy.hp > abs(player.hand[j].value):
                                 enemy.hp += int(player.hand[j].value * (1 + bonus_damages))
                                 print('Le joueur ' + str(enemy.player_index) + ' perd ' + str(abs(int(player.hand[j].value * (1 + bonus_damages)))) + ' points de vie')
@@ -237,17 +271,25 @@ def game():
                                 print('Le joueur ' + str(enemy.player_index) + ' n\'a plus de points de vie ! Le joueur ' + str(player.player_index) + ' remporte la partie !')
                                 progressing = False
                         if progressing == False:
-                            player.action_stock -= player.hand[j].cost
+                            player.mana_stock -= player.hand[j].cost
                             player.hand.remove(player.hand[j])
                             if player_deck.get_nb_cards_in_deck() > 0:
                                 add_card_to_hand(player_deck, player, True)
                             else:
-                                print('Le joueur n\'a plus de cartes dans son deck !')
+                                pygame.draw.rect(screen, (0, 0, 0), rect_info)
+                                text_tools.draw_text('Le joueur n\'a plus de cartes dans son deck !',
+                                                font_title, (255, 255, 255), screen, 250, 420)
+                                pygame.display.flip()
+                                time.sleep(1)
 
                             end_turn()
                         # print(str(tour))
                     else:
-                        print('Pas assez de ressouces')
+                        pygame.draw.rect(screen, (0, 0, 0), rect_info)
+                        text_tools.draw_text('Pas assez de ressouces',
+                                        font_title, (255, 255, 255), screen, 250, 420)
+                        pygame.display.flip()
+                        time.sleep(1)
                 elif player.hand[j].ressource_type == 'PO':
                     if player.gold_stock >= player.hand[j].cost:
                         # print('Vous pouvez jouer la carte')
@@ -261,7 +303,11 @@ def game():
                                         player.shield = 30
                                     progressing = False
                                 else:
-                                    print('Vos points de bouclier sont au maximum')
+                                    pygame.draw.rect(screen, (0, 0, 0), rect_info)
+                                    text_tools.draw_text('Vos points de bouclier sont au maximum',
+                                                    font_title, (255, 255, 255), screen, 250, 420)
+                                    pygame.display.flip()
+                                    time.sleep(1)
                             elif enemy.shield > abs(player.hand[j].value):
                                 if enemy.shield > 0:
                                     enemy.shield += player.hand[j].value
@@ -271,7 +317,11 @@ def game():
                                         enemy.shield = 0
                                     progressing = False
                                 else:
-                                    print('L\'adversaire n\'a plus de bouclier !')
+                                    pygame.draw.rect(screen, (0, 0, 0), rect_info)
+                                    text_tools.draw_text('L\'adversaire n\'a plus de bouclier !',
+                                                    font_title, (255, 255, 255), screen, 250, 420)
+                                    pygame.display.flip()
+                                    time.sleep(1)
                         elif player.hand[j].effect == 'Life':
                             if player.hand[j].target == 'Self':
                                 if player.hp < 100:
@@ -282,7 +332,11 @@ def game():
                                         player.hp = 100
                                     progressing = False
                                 else:
-                                    print('Vos points de vie sont au maximum')
+                                    pygame.draw.rect(screen, (0, 0, 0), rect_info)
+                                    text_tools.draw_text('Vos points de vie sont au maximum',
+                                                    font_title, (255, 255, 255), screen, 250, 420)
+                                    pygame.display.flip()
+                                    time.sleep(1)
                             elif enemy.hp > abs(player.hand[j].value):
                                 enemy.hp += int(player.hand[j].value * (1 + bonus_damages))
                                 print('Le joueur ' + str(enemy.player_index) + ' perd ' + str(abs(int(player.hand[j].value * (1 + bonus_damages)))) + ' points de vie')
@@ -293,17 +347,25 @@ def game():
                                 print('Le joueur ' + str(enemy.player_index) + ' n\'a plus de points de vie ! Le joueur ' + str(player.player_index) + ' remporte la partie !')
                                 progressing = False
                         if progressing == False:
-                            player.action_stock -= player.hand[j].cost
+                            player.gold_stock -= player.hand[j].cost
                             player.hand.remove(player.hand[j])
                             if player_deck.get_nb_cards_in_deck() > 0:
                                 add_card_to_hand(player_deck, player, True)
                             else:
-                                print('Le joueur n\'a plus de cartes dans son deck !')
+                                pygame.draw.rect(screen, (0, 0, 0), rect_info)
+                                text_tools.draw_text('Le joueur n\'a plus de cartes dans son deck !',
+                                                font_title, (255, 255, 255), screen, 250, 420)
+                                pygame.display.flip()
+                                time.sleep(1)
 
                             end_turn()
                         # print(str(tour))
                     else:
-                        print('Pas assez de ressouces')
+                        pygame.draw.rect(screen, (0, 0, 0), rect_info)
+                        text_tools.draw_text('Pas assez de ressouces',
+                                        font_title, (255, 255, 255), screen, 250, 420)
+                        pygame.display.flip()
+                        time.sleep(1)
                 # joueur2.hand.remove(joueur2.hand[j])
 
             # Discard avec le bouton droit
@@ -318,9 +380,10 @@ def game():
                 end_turn()
                 # print(str(tour))
 
-    get_username()
+    usernames = get_username()
 
-    joueur1.change_name(player1_username)
+    joueur1.change_name(usernames[0])
+    joueur2.change_name(usernames[1])
     joueur1.add_action_to_stock()
     joueur1.add_gold_to_stock()
     joueur1.add_mana_to_stock()
@@ -508,46 +571,81 @@ def print_hand(joueur):
 
 def get_username():
     font = pygame.font.Font(None, 70)
-    input_box = pygame.Rect(400, 445, 350, 65)
+    input_box_1 = pygame.Rect(500, 500, 350, 65)
+    input_box_2 = pygame.Rect(500, 600, 350, 65)
+    button_play = pygame.Rect(500, 800, 190, 65)
     color_inactive = pygame.Color('lightskyblue3')
     color_active = pygame.Color('dodgerblue2')
-    color = color_inactive
+    color1 = color_inactive
+    color2 = color_inactive
     global player1_username
-    active = False
-    text = ''
+    global player2_username
+    active1 = False
+    active2 = False
+    text1 = ''
+    text2 = ''
     done = False
 
     while not done:
+        mx, my = pygame.mouse.get_pos()
+
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 # If the user clicked on the input_box rect.
-                if input_box.collidepoint(event.pos):
+                if input_box_1.collidepoint(mx, my):
                     # Toggle the active variable.
-                    active = not active
+                    active1 = not active1
+                    if active2:
+                        active2 = False
+                elif input_box_2.collidepoint(mx, my):
+                    # Toggle the active variable.
+                    active2 = not active2
+                    if active1:
+                        active1 = False
                 else:
-                    active = False
+                    active1 = False
+                    active2 = False
                 # Change the current color of the input box.
-                color = color_active if active else color_inactive
+                color1 = color_active if active1 else color_inactive
+                color2 = color_active if active2 else color_inactive
             if event.type == pygame.KEYDOWN:
-                if active:
+                if active1:
                     if event.key == pygame.K_RETURN:
-                        player1_username = text
-                        done = True
+                        player1_username = text1
                     elif event.key == pygame.K_BACKSPACE:
-                        text = text[:-1]
+                        text1 = text1[:-1]
                     else:
-                        text += event.unicode
+                        text1 += event.unicode
+                if active2:
+                    if event.key == pygame.K_RETURN:
+                        player2_username = text2
+                    elif event.key == pygame.K_BACKSPACE:
+                        text2 = text2[:-1]
+                    else:
+                        text2 += event.unicode
+            if event.type == MOUSEBUTTONDOWN:
+                if button_play.collidepoint(mx, my) and event.button == 1 and text1 != '' and text2 != '':
+                    return [text1, text2]
 
         screen.fill((30, 30, 30))
         # Render the current text.
-        text_tools.draw_text("Votre pseudo :", font, pygame.Color('dodgerblue2'), screen, 50, 455)
-        txt_surface = font.render(text, True, color)
+        text_tools.draw_text("Clic gauche pour jouer une carte, clic droit pour se défausser d'une carte",
+                             font_text, (255, 255, 255), screen, 50, 200)
+        text_tools.draw_text("Pseudo joueur 1 :", font, pygame.Color('dodgerblue2'), screen, 50, 500)
+        text_tools.draw_text("Pseudo joueur 2 :", font, pygame.Color('dodgerblue2'), screen, 50, 600)
+        txt_surface = font.render(text1, True, color1)
+        txt_surface2 = font.render(text2, True, color2)
         # Resize the box if the text is too long.
         width = max(350, txt_surface.get_width() + 10)
-        input_box.w = width
+        input_box_1.w = width
         # Blit the text.
-        screen.blit(txt_surface, (input_box.x + 5, input_box.y + 5))
+        screen.blit(txt_surface, (input_box_1.x + 5, input_box_1.y + 5))
+        screen.blit(txt_surface2, (input_box_2.x + 5, input_box_2.y + 5))
         # Blit the input_box rect.
-        pygame.draw.rect(screen, color, input_box, 2)
+        pygame.draw.rect(screen, color1, input_box_1, 2)
+        pygame.draw.rect(screen, color2, input_box_2, 2)
+
+        pygame.draw.rect(screen, (30, 30, 30), button_play)
+        text_tools.draw_text('JOUER', font_title, (255, 255, 255), screen, 500, 805)
 
         pygame.display.flip()

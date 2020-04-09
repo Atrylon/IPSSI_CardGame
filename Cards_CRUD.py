@@ -27,8 +27,8 @@ def cards_list():
         screen.fill((192, 192, 192))
 
         button_option_1 = pygame.Rect(20, 20, 100, 40)
-        pygame.draw.rect(screen, (255, 0, 0), button_option_1)
-        text_tools.draw_text('Retour', font_text, (0, 0, 0), screen, 35, 25)
+        pygame.draw.rect(screen, (0, 0, 0), button_option_1)
+        text_tools.draw_text('Retour', font_text, (255, 255, 255), screen, 35, 25)
 
         cards = mysql_connexion.readCards()
         nb_cards = len(cards)
