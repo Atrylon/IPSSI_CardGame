@@ -52,7 +52,7 @@ def main_menu():
         button_2 = pygame.Rect(50, 350, 300, 100)
         button_3 = pygame.Rect(50, 500, 300, 100)
         button_4 = pygame.Rect(50, 650, 300, 100)
-
+        
         if button_1.collidepoint(mx, my):
             if click:
                 play.game()

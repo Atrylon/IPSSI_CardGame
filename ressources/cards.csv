@@ -1,0 +1,9 @@
+Destruction de bouclier,PA,1,Shield,-5,Enemy,Rare,Détruit le bouclier adverse avec violence
+Foudre,PM,2,Life,-20,Enemy,Rare,Lance un éclair sur votre adversaire et lui inflige des dégats
+Potion de soin,PO,3,Life,5,Self,Epic,Une potion de soin qui régénère un certain nombre de point de vie
+Achat de bouclier,PO,3,Shield,5,Self,Rare,Achat d'un nouveau bouclier
+Soin,PM,3,Life,5,Self,Rare,Sort de soin pour remonter sa vie
+Poison,PO,2,Life,-15,Enemy,Epic,Un poison violent qui détruit les points de vie de l'ennemi
+Amputation,PA,2,Life,-25,Enemy,Epic,Un gros coup
+Décapitation,PA,5,Life,-100,Enemy,Legendary,Ca OS quoi
+Renforcement,PA,3,shield,5,self,Rare,Réenforce ses défenses
