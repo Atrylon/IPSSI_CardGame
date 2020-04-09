@@ -2,11 +2,7 @@ import sys
 import pygame
 from pygame.locals import *
 
-import mysql_connexion
-import Cards_CRUD
-import Stats
-import text_tools
-import play
+import text_tools, play, Cards_CRUD, mysql_connexion
 
 mysql_connexion.init_db()
 
