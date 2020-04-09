@@ -166,13 +166,6 @@ def options():
     continuer = True
     click = False
 
-    # prompt = font_text.render('Liste des cartes :', True, (0, 0, 0))
-    # prompt_rect = prompt.get_rect(center=(center_x, center_y))
-    #
-    # user_input_value = ""
-    # user_input = font_text.render(user_input_value, True, GREEN)
-    # user_input_rect = user_input.get_rect(topleft=prompt_rect.topright)
-
     while continuer:
         screen.fill((192, 192, 192))
         mx, my = pygame.mouse.get_pos()
@@ -182,25 +175,25 @@ def options():
 
         text_tools.draw_text('Options', font_title, (0, 0, 0), screen, 20, 20)
         button_option_1 = pygame.Rect(50, 200, 600, 100)
-        button_option_2 = pygame.Rect(50, 350, 600, 100)
+        # button_option_2 = pygame.Rect(50, 350, 600, 100)
         button_option_3 = pygame.Rect(50, 500, 600, 100)
 
         if button_option_1.collidepoint(mx, my):
             if click:
                 Cards_CRUD.cards_list()
-        elif button_option_2.collidepoint(mx, my):
-            if click:
-                Stats.stats()
+        # elif button_option_2.collidepoint(mx, my):
+        #     if click:
+        #         Stats.stats()
         elif button_option_3.collidepoint(mx, my):
             if click:
                 continuer = False
 
         pygame.draw.rect(screen, (0, 0, 0), button_option_1)
-        pygame.draw.rect(screen, (0, 0, 0), button_option_2)
+        # pygame.draw.rect(screen, (0, 0, 0), button_option_2)
         pygame.draw.rect(screen, (0, 0, 0), button_option_3)
 
         screen.blit(font_title.render('Gestion des cartes', True, (255, 255, 255)), (88, 225))
-        screen.blit(font_title.render('Statistiques', True, (255, 255, 255)), (88, 375))
+        # screen.blit(font_title.render('Statistiques', True, (255, 255, 255)), (88, 375))
         screen.blit(font_title.render('Retour', True, (255, 255, 255)), (88, 525))
 
         click = False
