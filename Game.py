@@ -19,7 +19,6 @@ center_x, center_y = 640, 455
 GREEN = (40, 230, 120)
 font_title = pygame.font.SysFont('Helvetic', 75)
 font_text = pygame.font.SysFont('Comic Sans MS,Arial', 20)
-son = pygame.mixer.Sound("ressources/sound/The Witcher 3 - Wild Hunt OST - Cloak and Dagger.wav")
 
 heart = pygame.image.load("ressources/images/heart.png").convert_alpha()
 heart_small = pygame.transform.scale(heart, (44, 40))
@@ -47,7 +46,6 @@ deck_very_small = pygame.transform.scale(deck, (23, 23))
 
 
 def main_menu():
-    son.play(loops=0, maxtime=0, fade_ms=0)
     click = False
 
     while True:
@@ -208,12 +206,6 @@ def options():
             elif event.type == MOUSEBUTTONDOWN:
                 if event.button == 1:
                     click = True
-            # elif event.key == pygame.K_BACKSPACE:
-            #     user_input_value = user_input_value[:-1]
-            # else:
-            #     user_input_value += event.unicode
-            # user_input = font_text.render(user_input_value, True, GREEN)
-            # user_input_rect = user_input.get_rect(topleft=prompt_rect.topright)
 
         pygame.display.update()
 

@@ -14,6 +14,12 @@ from Classes.Card import Card
 pygame.init()
 pygame.font.init()
 
+musique_partie = pygame.mixer.Sound("ressources/sound/The Witcher 3 - Wild Hunt OST - Cloak and Dagger.wav")
+musique_win_start = pygame.mixer.Sound("ressources/sound/victory_screen_start.wav")
+musique_win = pygame.mixer.Sound("ressources/sound/victory_jingle.wav")
+musique_loose_start = pygame.mixer.Sound("ressources/sound/defeat_screen_start.wav")
+musique_loose = pygame.mixer.Sound("ressources/sound/defeat_jingle.wav")
+
 screen = pygame.display.set_mode((1280, 910))
 font_title = pygame.font.SysFont('Helvetic', 75)
 font_retour = pygame.font.SysFont('Comic Sans MS,Arial', 30)
@@ -68,6 +74,8 @@ fond_carte_pa_small = pygame.image.load("ressources/fonds de cartes/fond_carte_0
 
 
 def game():
+    musique_partie.play(loops=0, maxtime=0, fade_ms=0)
+
     global joueur1
     global joueur2
     global tour
@@ -118,6 +126,7 @@ def game():
     def action_depending_of_card(player, enemy, player_hand, player_deck):
         bonus_damages = 0
         progressing = True
+        done = False
 
         rect_info = pygame.Rect(10, 400, 1260, 100)
 
@@ -192,7 +201,8 @@ def game():
                                 enemy.hp += int(player.hand[j].value * (1 + bonus_damages))
                                 print('Le joueur ' + str(enemy.player_index) + ' perd ' + str(abs(int(player.hand[j].value * (1 + bonus_damages)))) + ' points de vie')
                                 print('Le joueur ' + str(enemy.player_index) + ' n\'a plus de points de vie ! Le joueur ' + str(player.player_index) + ' remporte la partie !')
-                                progressing = False
+                                done = end_game()
+                                return done
 
                         if progressing == False:
                             player.action_stock -= player.hand[j].cost
@@ -269,7 +279,8 @@ def game():
                                 enemy.hp += int(player.hand[j].value * (1 + bonus_damages))
                                 print('Le joueur ' + str(enemy.player_index) + ' perd ' + str(abs(int(player.hand[j].value * (1 + bonus_damages)))) + ' points de vie')
                                 print('Le joueur ' + str(enemy.player_index) + ' n\'a plus de points de vie ! Le joueur ' + str(player.player_index) + ' remporte la partie !')
-                                progressing = False
+                                done = end_game()
+                                return done
                         if progressing == False:
                             player.mana_stock -= player.hand[j].cost
                             player.hand.remove(player.hand[j])
@@ -345,7 +356,9 @@ def game():
                                 enemy.hp += int(player.hand[j].value * (1 + bonus_damages))
                                 print('Le joueur ' + str(enemy.player_index) + ' perd ' + str(abs(int(player.hand[j].value * (1 + bonus_damages)))) + ' points de vie')
                                 print('Le joueur ' + str(enemy.player_index) + ' n\'a plus de points de vie ! Le joueur ' + str(player.player_index) + ' remporte la partie !')
-                                progressing = False
+                                done = end_game()
+                                return done
+
                         if progressing == False:
                             player.gold_stock -= player.hand[j].cost
                             player.hand.remove(player.hand[j])
@@ -423,6 +436,10 @@ def game():
         print_hand(joueur1)
         print_hand(joueur2)
 
+        # done = end_game()
+        # if done:
+        #     continuer = False
+
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
@@ -432,9 +449,12 @@ def game():
                     continuer = False
             if event.type == MOUSEBUTTONDOWN:
                 if tour % 2 == 1:
-                    action_depending_of_card(joueur1, joueur2, hand1, deck_joueur1)
+                    done = action_depending_of_card(joueur1, joueur2, hand1, deck_joueur1)
                 elif tour % 2 == 0:
-                    action_depending_of_card(joueur2, joueur1, hand2, deck_joueur2)
+                    done = action_depending_of_card(joueur2, joueur1, hand2, deck_joueur2)
+
+                if done:
+                    continuer = False
 
                 if rect_end_turn.collidepoint((mx, my)) and event.button == 1:
                     end_turn()
@@ -649,3 +669,49 @@ def get_username():
         text_tools.draw_text('JOUER', font_title, (255, 255, 255), screen, 500, 805)
 
         pygame.display.flip()
+
+def end_game():
+    global joueur1
+    global joueur2
+
+    button_retour = pygame.Rect(400, 800, 400, 65)
+    done = False
+    musique_partie.stop()
+
+    screen.fill((30, 30, 30))
+
+    # joueur1.hp = 0
+
+    text_tools.draw_text("Nombre de tour joués : " + str(tour), font_retour, (255, 255, 255), screen, 120, 300)
+    pygame.draw.rect(screen, (30, 30, 30), button_retour)
+    text_tools.draw_text('Retour au menu', font_title, (255, 255, 255), screen, 400, 805)
+
+    if joueur1.hp <= 0:
+        text_tools.draw_text("Victoire du joueur 2 !", font_title, (255, 255, 255), screen, 400, 120)
+        text_tools.draw_text("Nombre de Points de vie restants : " + str(joueur2.hp), font_retour, (255, 255, 255),
+                             screen, 120, 400)
+        text_tools.draw_text("Nombre de points de bouclier restants : " + str(joueur1.shield), font_retour,
+                             (255, 255, 255), screen, 120, 500)
+        musique_loose_start.play()
+        musique_loose.play()
+    elif joueur2.hp <= 0:
+        text_tools.draw_text("Victoire du joueur 1 !", font_title, (255, 255, 255), screen, 400, 120)
+        text_tools.draw_text("Nombre de Points de vie restants : " + str(joueur1.hp), font_retour, (255, 255, 255),
+                             screen, 120, 400)
+        text_tools.draw_text("Nombre de points de bouclier restants : " + str(joueur1.shield), font_retour,
+                             (255, 255, 255), screen, 120, 500)
+        musique_win_start.play()
+        musique_win.play()
+    pygame.display.flip()
+
+    while not done:
+        mx, my = pygame.mouse.get_pos()
+
+        for event in pygame.event.get():
+            if event.type == MOUSEBUTTONDOWN:
+                if button_retour.collidepoint(mx, my) and event.button == 1:
+                    done = True
+                    return done
+            if event.type == QUIT:
+                pygame.quit()
+                sys.exit()
