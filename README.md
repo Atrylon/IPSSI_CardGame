@@ -21,7 +21,7 @@ You can use the sql file to get some base cards to try the game
 * [Pygame](https://www.pygame.org/news)
 
 
-## Author
+## Authors
 **Berenger Desgardin** - *Initial work* - [Atrylon](https://gihub.com/Atrylon)
 
 **Nathan Michel** - *Initial work* - [KekAuCitron](https://github.com/KekAuCitron)
