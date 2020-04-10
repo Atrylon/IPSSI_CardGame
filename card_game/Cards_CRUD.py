@@ -170,9 +170,9 @@ def cards_list():
 def create_card(card, mode = "create"):
     name_input = InputBox(200, 25, 140, 32, card.get_name(), str)
     ressource_type_input = InputBox(350, 75, 140, 32, card.get_ressource_type(), str, ['PA', 'PM', 'PO'], 'Ressource non reconnue')
-    cost_input = InputBox(100, 125, 140, 32, card.get_cost(), int)
+    cost_input = InputBox(100, 125, 140, 32, str(card.get_cost()), int)
     effect_input = InputBox(300, 175, 140, 32, card.get_effect(), str, ['Life', 'Shield'], 'Effet non reconnu')
-    value_input = InputBox(100, 225, 140, 32, card.get_value(), int)
+    value_input = InputBox(100, 225, 140, 32, str(card.get_value()), int)
     target_input = InputBox(250, 275, 140, 32, card.get_target(), str, ['Self', 'Enemy'], 'Cible non reconnue')
     rarity_input = InputBox(350, 325, 140, 32, card.get_rarity(), str, ['Rare', 'Epic', 'Legendary'], 'Rareté non reconnue')
     description_input = InputBox(200, 375, 140, 32, card.get_description(), str)
@@ -225,7 +225,8 @@ def create_card(card, mode = "create"):
                         done = mysql_connexion.createCard(input_boxes)
                         # done = generate_card(input_boxes)
                     elif (mode == "edit"):
-                        done =edit_card(input_boxes)
+                        mysql_connexion.editCard(input_boxes)
+                        done = edit_card(input_boxes)
                 if button_option_2.collidepoint(mx, my) and event.button == 1:
                     done = True
             for box in input_boxes:
@@ -262,7 +263,7 @@ def generate_card(input_boxes):
     
     new_card = Card(input_boxes[0].getInput(), input_boxes[1].getInput(), input_boxes[2].getInput(), input_boxes[3].getInput(), input_boxes[4].getInput(), input_boxes[5].getInput(), input_boxes[6].getInput(), input_boxes[7].getInput())
     cards.append(new_card)
-    edit_csv()
+    # edit_csv()
     #save_card(new_card)   
     return True
 
@@ -290,7 +291,8 @@ def break_text(txt):
             line = ""
     new_txt.append(line)
     return new_txt
-    
+
+
 def add_buttons(screen, button_edit, button_delete, x):
     y = 725
 
@@ -300,8 +302,7 @@ def add_buttons(screen, button_edit, button_delete, x):
     text_tools.draw_text('Modifier', font_text, (0, 0, 0), screen, x+50, y)
     text_tools.draw_text('Supprimer', font_text, (0, 0, 0), screen, x+170, y)
     
-    
-    
+
 def edit_card(input_boxes):
     print("edition d'une carte")
     validated = validate_boxes(input_boxes)
@@ -311,6 +312,8 @@ def edit_card(input_boxes):
     edited_card = Card(input_boxes[0].getInput(), input_boxes[1].getInput(), input_boxes[2].getInput(), input_boxes[3].getInput(), input_boxes[4].getInput(), input_boxes[5].getInput(), input_boxes[6].getInput(), input_boxes[7].getInput())
     
     print(edited_card.get_name())
+
+    mysql_connexion.editCard(edited_card)
     
     n = find_card_index(edited_card.get_name())
     if n:

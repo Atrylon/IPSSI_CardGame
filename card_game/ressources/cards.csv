@@ -6,6 +6,8 @@ Soin,PM,3,Life,5,Self,Rare,Sort de soin pour remonter sa vie
 Poison,PO,2,Life,-15,Enemy,Epic,Un poison violent qui détruit les points de vie de l'ennemi
 Amputation,PA,2,Life,-25,Enemy,Epic,Un gros coup
 Décapitation,PA,5,Life,-100,Enemy,Legendary,Ca OS quoi
-Renforcement,PA,3,shield,5,self,Rare,Réenforce ses défenses
-Test,PA,3,Life,3,Enemy,Rare,Test
-Test Creation,PO,2,Life,3,Self,Epic,Test
+Torrent de flammes,PM,4,Life,-50,Enemy,Epic,Déverse un torrent de flammes sur l'ennemi
+Entaille,PA,1,Life,-5,Enemy,Rare,Inflige une large entaille à l'ennemi
+Boule de feu,PM,1,Life,-5,Enemy,Rare,Envoie une boule de feu
+Eclair de givre,PM,1,Life,-5,Enemy,Rare,Gele l'ennemi
+Test,PM,1,Life,-5,Enemy,Epic,Test de création de carte
