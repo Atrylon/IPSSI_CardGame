@@ -1,7 +1,7 @@
 import MySQLdb as mdb
 
 DBNAME = "ipssi_card_game"
-DBHOST = "127.0.0.1:3306"
+DBHOST = "localhost"
 DBPASS = ""
 DBUSER = "root"
 
@@ -109,3 +109,70 @@ def readCards():
         print("Connexion error")
 
     return final_result
+
+
+def createCard(input_boxes):
+
+    try:
+        connection = mdb.connect(DBHOST, DBUSER, DBPASS, DBNAME)
+
+        cur = connection.cursor()
+
+        sqlquery = """
+        INSERT INTO card(Name, Ressource_type, Cost, Effect, Value, Target, Rarity, Description)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+        """
+
+        card = input_boxes[0].getInput(), input_boxes[1].getInput(), input_boxes[2].getInput(), input_boxes[3].getInput(), input_boxes[4].getInput(), input_boxes[5].getInput(), input_boxes[6].getInput(), input_boxes[7].getInput()
+
+        cur.execute(sqlquery, card)
+        print("Card create successfully")
+
+        return True
+
+    except mdb.Error as e:
+        print("Error")
+
+def editCard(input_boxes):
+
+    try:
+        connection = mdb.connect(DBHOST, DBUSER, DBPASS, DBNAME)
+
+        cur = connection.cursor()
+
+        sqlquery = """
+        UPDATE card SET Name = %s, Ressource_type = %s, Cost = %s, Effect = %s, Value = %s, Target = %s, Rarity =%s,
+         Description = %s
+        WHERE Name = %s """
+
+        card = input_boxes[0].getInput(), input_boxes[1].getInput(), input_boxes[2].getInput(), \
+               input_boxes[3].getInput(), input_boxes[4].getInput(), input_boxes[5].getInput(), \
+               input_boxes[6].getInput(), input_boxes[7].getInput(), input_boxes[0].getInput()
+
+        cur.execute(sqlquery, card)
+        print("Card edited successfully")
+
+        connection.commit()
+
+        return True
+
+    except mdb.Error as e:
+        print(e)
+
+
+def deleteCard(card_name):
+
+    try:
+        connection = mdb.connect(DBHOST, DBUSER, DBPASS, DBNAME)
+
+        cur = connection.cursor()
+
+        sqlquery = "DELETE FROM card WHERE Name = %s"
+
+        cur.execute(sqlquery, [card_name])
+        print("Card deleted successfully")
+
+        return True
+
+    except mdb.Error as e:
+        print(e)

@@ -4,7 +4,6 @@ import csv
 import os
 from pygame.locals import *
 
-import text_tools, mysql_connexion
 import mysql_connexion
 import text_tools
 from Classes.Card import Card
@@ -16,7 +15,7 @@ screen = pygame.display.set_mode((1280, 910))
 card_cadre = pygame.display.set_mode((275, 350))
 # font_text = pygame.font.SysFont('Comic Sans MS', 20)
 
-cards = [];
+cards = []
 font_text = pygame.font.SysFont('Comic Sans MS,Arial', 20)
 font_title = pygame.font.SysFont('Helvetic', 75)
 card_csv_path = 'ressources/cards.csv'
@@ -24,14 +23,18 @@ card_csv_path = 'ressources/cards.csv'
 
 def cards_list():
     continuer = True
-    card_set = {}
 
     # begin of the loop
     n = 0
     # end of the loop
     m = 3
 
-    get_cards_csv()
+    # get_cards_csv()
+    # for card in cards:
+    #     print(card)
+
+    test_cards = mysql_connexion.readCards()
+    get_cards_db(test_cards)
     nb_cards = len(cards)
 
     while continuer:
@@ -57,10 +60,10 @@ def cards_list():
         button_edit_3 = pygame.Rect(850, 720, 100, 40)
         button_delete_3 = pygame.Rect(970, 720, 140, 40)
         
-        
-        add_buttons(screen, button_edit_1, button_delete_1, 110)
-        add_buttons(screen, button_edit_2, button_delete_2, 460)
-        add_buttons(screen, button_edit_3, button_delete_3, 810)
+        #
+        # add_buttons(screen, button_edit_1, button_delete_1, 110)
+        # add_buttons(screen, button_edit_2, button_delete_2, 460)
+        # add_buttons(screen, button_edit_3, button_delete_3, 810)
 
         #cards = mysql_connexion.readCards()
         #nb_cards = len(cards)
@@ -85,7 +88,13 @@ def cards_list():
 
         # On veut afficher juste 3 cartes à la fois
         for card in cards[n:m]:
-            
+
+            add_buttons(screen, button_edit_1, button_delete_1, 110)
+            if len(cards) > n+1:
+                add_buttons(screen, button_edit_2, button_delete_2, 460)
+            if len(cards) > n+2:
+                add_buttons(screen, button_edit_3, button_delete_3, 810)
+
             # card_set[card[0]] = pygame.Rect(x, y, 340, 474)
             # pygame.draw.rect(screen, (192, 192, 192), card_set[card[0]])
 
@@ -161,9 +170,9 @@ def cards_list():
 def create_card(card, mode = "create"):
     name_input = InputBox(200, 25, 140, 32, card.get_name(), str)
     ressource_type_input = InputBox(350, 75, 140, 32, card.get_ressource_type(), str, ['PA', 'PM', 'PO'], 'Ressource non reconnue')
-    cost_input = InputBox(100, 125, 140, 32, card.get_cost(), int)
+    cost_input = InputBox(100, 125, 140, 32, str(card.get_cost()), int)
     effect_input = InputBox(300, 175, 140, 32, card.get_effect(), str, ['Life', 'Shield'], 'Effet non reconnu')
-    value_input = InputBox(100, 225, 140, 32, card.get_value(), int)
+    value_input = InputBox(100, 225, 140, 32, str(card.get_value()), int)
     target_input = InputBox(250, 275, 140, 32, card.get_target(), str, ['Self', 'Enemy'], 'Cible non reconnue')
     rarity_input = InputBox(350, 325, 140, 32, card.get_rarity(), str, ['Rare', 'Epic', 'Legendary'], 'Rareté non reconnue')
     description_input = InputBox(200, 375, 140, 32, card.get_description(), str)
@@ -213,9 +222,11 @@ def create_card(card, mode = "create"):
                     for box in input_boxes:
                         box.validateInput()
                     if (mode == "create"):
-                        done = generate_card(input_boxes)
+                        done = mysql_connexion.createCard(input_boxes)
+                        # done = generate_card(input_boxes)
                     elif (mode == "edit"):
-                        done =edit_card(input_boxes)
+                        mysql_connexion.editCard(input_boxes)
+                        done = edit_card(input_boxes)
                 if button_option_2.collidepoint(mx, my) and event.button == 1:
                     done = True
             for box in input_boxes:
@@ -227,7 +238,6 @@ def create_card(card, mode = "create"):
         #clock.tick(30)    
 
 
-
 def get_cards_csv():
     with open(card_csv_path) as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
@@ -235,8 +245,17 @@ def get_cards_csv():
             card = Card(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7])
             cards.append(card)
     csv_file.close()
-            
-    
+
+
+def get_cards_db(cards_db):
+    global cards
+    cards = []
+
+    for card_db in cards_db:
+        card = Card(card_db[1], card_db[2], card_db[3], card_db[4], card_db[5], card_db[6], card_db[7], card_db[8])
+        cards.append(card)
+
+
 def generate_card(input_boxes):
     validated = validate_boxes(input_boxes)
     if validated == False:
@@ -244,10 +263,11 @@ def generate_card(input_boxes):
     
     new_card = Card(input_boxes[0].getInput(), input_boxes[1].getInput(), input_boxes[2].getInput(), input_boxes[3].getInput(), input_boxes[4].getInput(), input_boxes[5].getInput(), input_boxes[6].getInput(), input_boxes[7].getInput())
     cards.append(new_card)
-    edit_csv()
+    # edit_csv()
     #save_card(new_card)   
     return True
-        
+
+
 def save_card(card):
     print("new card")
 
@@ -261,7 +281,7 @@ def break_text(txt):
     words = txt.split()
     line = ""
     new_txt = []
-    x = 0;
+    x = 0
     for word in words:
         x = x + len(word)
         line = line + word + " "
@@ -271,7 +291,8 @@ def break_text(txt):
             line = ""
     new_txt.append(line)
     return new_txt
-    
+
+
 def add_buttons(screen, button_edit, button_delete, x):
     y = 725
 
@@ -281,8 +302,7 @@ def add_buttons(screen, button_edit, button_delete, x):
     text_tools.draw_text('Modifier', font_text, (0, 0, 0), screen, x+50, y)
     text_tools.draw_text('Supprimer', font_text, (0, 0, 0), screen, x+170, y)
     
-    
-    
+
 def edit_card(input_boxes):
     print("edition d'une carte")
     validated = validate_boxes(input_boxes)
@@ -292,6 +312,8 @@ def edit_card(input_boxes):
     edited_card = Card(input_boxes[0].getInput(), input_boxes[1].getInput(), input_boxes[2].getInput(), input_boxes[3].getInput(), input_boxes[4].getInput(), input_boxes[5].getInput(), input_boxes[6].getInput(), input_boxes[7].getInput())
     
     print(edited_card.get_name())
+
+    mysql_connexion.editCard(edited_card)
     
     n = find_card_index(edited_card.get_name())
     if n:
@@ -303,7 +325,8 @@ def edit_card(input_boxes):
         
 def delete_card(card):
     cards.remove(card)
-    edit_csv()
+    mysql_connexion.deleteCard(card.name)
+    # edit_csv()
 
     
 def find_card_index(card_name):
