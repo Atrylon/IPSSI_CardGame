@@ -1,4 +1,5 @@
 import pygame
+import sys
 import random
 import time
 from pygame.locals import *
@@ -25,12 +26,12 @@ font_retour = pygame.font.SysFont('Comic Sans MS,Arial', 30)
 font_text = pygame.font.SysFont('Comic Sans MS,Arial', 15)
 font_text_small = pygame.font.SysFont('Comic Sans MS', 12)
 
-joueur1 = Player(1, '')
-joueur2 = Player(2, '')
+joueur1 = None
+joueur2 = None
 
 deck_list_cards = Deck('Liste de toutes les cartes')
-deck_joueur1 = Deck('Deck de test 1')
-deck_joueur2 = Deck('Deck de test 2')
+deck_joueur1 = None
+deck_joueur2 = None
 hand1 = {}
 hand2 = {}
 player1_username = ''
@@ -81,6 +82,11 @@ def game():
     global deck_joueur1
     global deck_joueur2
     global deck_list_cards
+
+    joueur1 = Player(1, '')
+    joueur2 = Player(2, '')
+    deck_joueur1 = Deck('Deck de test 1')
+    deck_joueur2 = Deck('Deck de test 2')
 
     def add_card_to_hand(deck, joueur, delete=False):
         card_from_hand_to_deck = random.choice(deck.get_cards_from_deck())
