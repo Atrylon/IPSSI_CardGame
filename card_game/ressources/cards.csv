@@ -7,3 +7,5 @@ Poison,PO,2,Life,-15,Enemy,Epic,Un poison violent qui détruit les points de vie 
 Amputation,PA,2,Life,-25,Enemy,Epic,Un gros coup
 Décapitation,PA,5,Life,-100,Enemy,Legendary,Ca OS quoi
 Renforcement,PA,3,shield,5,self,Rare,Réenforce ses défenses
+Test,PA,3,Life,3,Enemy,Rare,Test
+Test Creation,PO,2,Life,3,Self,Epic,Test

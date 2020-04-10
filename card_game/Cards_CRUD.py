@@ -1,19 +1,16 @@
 import sys
 import pygame
 import csv
+import os
 from pygame.locals import *
 
-<<<<<<< HEAD:card_game/Cards_CRUD.py
 import text_tools, mysql_connexion
-=======
 import mysql_connexion
 import text_tools
 from Classes.Card import Card
-from Classes.TextInput import TextInput
 from Classes.InputBox import InputBox
 from tempfile import NamedTemporaryFile
 
->>>>>>> dev-nathan:Cards_CRUD.py
 
 screen = pygame.display.set_mode((1280, 910))
 card_cadre = pygame.display.set_mode((275, 350))
@@ -22,6 +19,7 @@ card_cadre = pygame.display.set_mode((275, 350))
 cards = [];
 font_text = pygame.font.SysFont('Comic Sans MS,Arial', 20)
 font_title = pygame.font.SysFont('Helvetic', 75)
+card_csv_path = 'ressources/cards.csv'
 
 
 def cards_list():
@@ -231,7 +229,7 @@ def create_card(card, mode = "create"):
 
 
 def get_cards_csv():
-    with open('ressources/cards.csv') as csv_file:
+    with open(card_csv_path) as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
         for row in csv_reader:
             card = Card(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7])
@@ -245,14 +243,15 @@ def generate_card(input_boxes):
         return False
     
     new_card = Card(input_boxes[0].getInput(), input_boxes[1].getInput(), input_boxes[2].getInput(), input_boxes[3].getInput(), input_boxes[4].getInput(), input_boxes[5].getInput(), input_boxes[6].getInput(), input_boxes[7].getInput())
-    
-    save_card(new_card)   
+    cards.append(new_card)
+    edit_csv()
+    #save_card(new_card)   
     return True
         
 def save_card(card):
     print("new card")
 
-    with open('ressources/cards.csv', 'a', newline='\n') as csv_file:
+    with open(card_csv_path, 'a', newline='') as csv_file:
         writer = csv.writer(csv_file)
         writer.writerow([card.get_name(), card.get_ressource_type(), int(card.get_cost()), card.get_effect(), int(card.get_value()), card.get_target(), card.get_rarity(), card.get_description()])
     csv_file.close()
@@ -297,11 +296,7 @@ def edit_card(input_boxes):
     n = find_card_index(edited_card.get_name())
     if n:
         cards[n] = edited_card
-        print(cards)
-        #edit_csv()
-    else:
-        print("nouvelle carte")
-        save_card(edited_card)
+        edit_csv()
    
     return True
 
@@ -326,13 +321,9 @@ def validate_boxes(input_boxes):
     return True
 
 def edit_csv():
-    tempfile = NamedTemporaryFile(delete=False)
-    
-    with open('ressources/cards.csv', 'rb') as csv_file, tempfile:
-        reader = csv.reader(csv_file, delimiter=',')
-        writer = csv.writer(tempfile, delimiter=',')
+    os.remove(card_csv_path)
+    with open(card_csv_path, 'w', newline='') as csv_file:
+        writer = csv.writer(csv_file, delimiter=',')
         for card in cards:
             writer.writerow([card.get_name(), card.get_ressource_type(), int(card.get_cost()), card.get_effect(), int(card.get_value()), card.get_target(), card.get_rarity(), card.get_description()])
     csv_file.close()
-    tempfile.close()
-    shutil.move(tempfile.name, 'ressources/cards.csv')

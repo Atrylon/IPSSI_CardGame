@@ -6,5 +6,5 @@ save_non_project_files = False
 
 [main]
 version = 0.2.0
-recent_files = ['Game.py', 'Classes\\Card.py', 'Stats.py', 'Cards_CRUD.py', 'Classes\\InputBox.py', 'ressources\\cards.csv', '..\\..\\..\\..\\anaconda3\\lib\\site-packages\\pygame\\sysfont.py', 'ressources\\cards-backup.csv']
+recent_files = ['card_game\\Game.py', 'card_game\\Cards_CRUD.py', 'card_game\\ressources\\cards-backup.csv']
 
