@@ -133,7 +133,7 @@ def createCard(input_boxes):
     except mdb.Error as e:
         print("Error")
 
-def editCard(input_boxes):
+def editCard(input_boxes, previous_name):
 
     try:
         connection = mdb.connect(DBHOST, DBUSER, DBPASS, DBNAME)
@@ -142,12 +142,11 @@ def editCard(input_boxes):
 
         sqlquery = """
         UPDATE card SET Name = %s, Ressource_type = %s, Cost = %s, Effect = %s, Value = %s, Target = %s, Rarity =%s,
-         Description = %s
-        WHERE Name = %s """
+         Description = %s WHERE Name = %s """
 
         card = input_boxes[0].getInput(), input_boxes[1].getInput(), input_boxes[2].getInput(), \
                input_boxes[3].getInput(), input_boxes[4].getInput(), input_boxes[5].getInput(), \
-               input_boxes[6].getInput(), input_boxes[7].getInput(), input_boxes[0].getInput()
+               input_boxes[6].getInput(), input_boxes[7].getInput(), previous_name
 
         cur.execute(sqlquery, card)
         print("Card edited successfully")

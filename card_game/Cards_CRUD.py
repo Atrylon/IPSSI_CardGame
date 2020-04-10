@@ -225,7 +225,7 @@ def create_card(card, mode = "create"):
                         done = mysql_connexion.createCard(input_boxes)
                         # done = generate_card(input_boxes)
                     elif (mode == "edit"):
-                        mysql_connexion.editCard(input_boxes)
+                        mysql_connexion.editCard(input_boxes, card.get_name())
                         done = edit_card(input_boxes)
                 if button_option_2.collidepoint(mx, my) and event.button == 1:
                     done = True
@@ -313,7 +313,7 @@ def edit_card(input_boxes):
     
     print(edited_card.get_name())
 
-    mysql_connexion.editCard(edited_card)
+    # mysql_connexion.editCard(edited_card, )
     
     n = find_card_index(edited_card.get_name())
     if n:
