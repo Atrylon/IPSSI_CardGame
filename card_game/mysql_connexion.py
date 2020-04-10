@@ -113,8 +113,6 @@ def readCards():
 
 def createCard(input_boxes):
 
-    final_result = []
-
     try:
         connection = mdb.connect(DBHOST, DBUSER, DBPASS, DBNAME)
 
@@ -134,3 +132,21 @@ def createCard(input_boxes):
 
     except mdb.Error as e:
         print("Error")
+
+
+def deleteCard(card_name):
+
+    try:
+        connection = mdb.connect(DBHOST, DBUSER, DBPASS, DBNAME)
+
+        cur = connection.cursor()
+
+        sqlquery = "DELETE FROM card WHERE Name = %s"
+
+        cur.execute(sqlquery, [card_name])
+        print("Card deleted successfully")
+
+        return True
+
+    except mdb.Error as e:
+        print(e)
