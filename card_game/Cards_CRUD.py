@@ -4,7 +4,6 @@ import csv
 import os
 from pygame.locals import *
 
-import text_tools, mysql_connexion
 import mysql_connexion
 import text_tools
 from Classes.Card import Card
@@ -31,7 +30,12 @@ def cards_list():
     # end of the loop
     m = 3
 
-    get_cards_csv()
+    # get_cards_csv()
+    # for card in cards:
+    #     print(card)
+
+    test_cards = mysql_connexion.readCards()
+    get_cards_db(test_cards)
     nb_cards = len(cards)
 
     while continuer:
@@ -235,6 +239,11 @@ def get_cards_csv():
             card = Card(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7])
             cards.append(card)
     csv_file.close()
+
+def get_cards_db(cards_db):
+    for card_db in cards_db:
+        card = Card(card_db[1], card_db[2], card_db[3], card_db[4], card_db[5], card_db[6], card_db[7], card_db[8])
+        cards.append(card)
             
     
 def generate_card(input_boxes):

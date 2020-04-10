@@ -1,7 +1,7 @@
 import MySQLdb as mdb
 
 DBNAME = "ipssi_card_game"
-DBHOST = "127.0.0.1:3306"
+DBHOST = "localhost"
 DBPASS = ""
 DBUSER = "root"
 
