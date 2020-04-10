@@ -217,7 +217,8 @@ def create_card(card, mode = "create"):
                     for box in input_boxes:
                         box.validateInput()
                     if (mode == "create"):
-                        done = generate_card(input_boxes)
+                        done = mysql_connexion.createCard(input_boxes)
+                        # done = generate_card(input_boxes)
                     elif (mode == "edit"):
                         done =edit_card(input_boxes)
                 if button_option_2.collidepoint(mx, my) and event.button == 1:
@@ -231,7 +232,6 @@ def create_card(card, mode = "create"):
         #clock.tick(30)    
 
 
-
 def get_cards_csv():
     with open(card_csv_path) as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
@@ -239,6 +239,7 @@ def get_cards_csv():
             card = Card(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7])
             cards.append(card)
     csv_file.close()
+
 
 def get_cards_db(cards_db):
     for card_db in cards_db:
@@ -256,7 +257,8 @@ def generate_card(input_boxes):
     edit_csv()
     #save_card(new_card)   
     return True
-        
+
+
 def save_card(card):
     print("new card")
 

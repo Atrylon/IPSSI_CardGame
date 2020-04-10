@@ -109,3 +109,28 @@ def readCards():
         print("Connexion error")
 
     return final_result
+
+
+def createCard(input_boxes):
+
+    final_result = []
+
+    try:
+        connection = mdb.connect(DBHOST, DBUSER, DBPASS, DBNAME)
+
+        cur = connection.cursor()
+
+        sqlquery = """
+        INSERT INTO card(Name, Ressource_type, Cost, Effect, Value, Target, Rarity, Description)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+        """
+
+        card = input_boxes[0].getInput(), input_boxes[1].getInput(), input_boxes[2].getInput(), input_boxes[3].getInput(), input_boxes[4].getInput(), input_boxes[5].getInput(), input_boxes[6].getInput(), input_boxes[7].getInput()
+
+        cur.execute(sqlquery, card)
+        print("Card create successfully")
+
+        return True
+
+    except mdb.Error as e:
+        print("Error")
